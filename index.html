@@ -18,28 +18,27 @@
             --bar-active: #ffffff; 
             --grisesito:  #575757; 
 
-            /* NUEVOS COLORES PARA MODAL */
             --modal-win: var(--accent);
             --modal-lose: #b42828; 
             --modal-title-win: #ffffff;
             --modal-title-lose: #ffffff;
-            --modal-bg-header: #962020; /* Rojo oscuro similar a la imagen 2 */
-            --modal-bg-body: #212425; /* Color de fondo del modal completo, un poco más oscuro que panel */
+            --modal-bg-header: #962020; 
+            --modal-bg-body: #212425; 
             
             /* NUEVO COLOR PARA SKIP (GRIS OSCURO) */
             --skip-color: #2c3332; 
 
             /* NUEVOS COLORES PARA RACHA */
-            --streak-zero: var(--muted); /* Gris para racha 0 */
-            --streak-low: #ff9900; /* Naranja claro para rachas bajas */
-            --streak-medium: #ff6600; /* Naranja intenso para rachas medias */
-            --streak-high: #ff0000; /* Rojo para rachas altas */
+            --streak-zero: var(--muted); 
+            --streak-low: #ff9900; 
+            --streak-medium: #ff6600; 
+            --streak-high: #ff0000; 
         }
         html,body{height:100%;margin:0}
         body {
             background-color: var(--bg);
             color: var(--white);
-            font-family: 'Open Sans', sans-serif; /* CAMBIO DE FUENTE GENERAL */
+            font-family: 'Open Sans', sans-serif; 
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -49,16 +48,16 @@
             overflow-x: hidden; 
             overflow-y: hidden; 
             
-            /* INICIO CAMBIO PARA ZOOM GLOBAL (125%) */
+            
             zoom: 1.10; 
-            /* FIN CAMBIO PARA ZOOM GLOBAL */
+           
         }
         
         /* CAMBIO EN HEADER PARA CENTRAR EL LOGO Y EL EMOTE VERTICALMENTE */
         header {
             width: 100%;
             display: flex;
-            flex-direction: column; /* Apilar elementos verticalmente */
+            flex-direction: column; 
             justify-content: center;
             align-items: center;
             padding: 25px 10px 10px 25px; 
@@ -71,7 +70,7 @@
         header .logo { 
             font-family: 'Montserrat', sans-serif; /* FUENTE DEL LOGO */
             font-size: 2.2em; 
-            font-weight: 800; /* 'Muy bold' */
+            font-weight: 800; 
             letter-spacing: -1px; 
             cursor: default; 
             text-transform: uppercase;
@@ -79,10 +78,10 @@
         
         /* ESTILO PARA EL EMOTE */
         #emote-7tv {
-            width: 230px; /* Ancho solicitado */
-            height: 60px; /* Alto solicitado */
-            margin-top: 3px; /* Pequeño espacio debajo del logo */
-            display: block; /* Asegurar que se comporte como un bloque centrado */
+            width: 230px; 
+            height: 60px; 
+            margin-top: 3px; 
+            display: block; 
         }
 
         main {
@@ -98,14 +97,14 @@
             position: relative; 
         }
         
-        /* Cajas de Adivinanza (SLOTS) - 550px */
+        
         .guess-boxes { 
             width: 100%; 
             margin-bottom: 50px; 
             max-width: 550px; 
         }
         .guess-box {
-            /* >>> INICIO MODIFICACIÓN: ESTADO INICIAL (BORDE Y FONDO BG) <<< */
+            
             background-color: var(--bg); /* fondo igual al body */
             border: 2px solid var(--panel); /* borde del color de acento */
             border-radius: 4px; 
@@ -155,7 +154,7 @@
             font-weight: bold;
             border-color: var(--skip-color); /* relleno completo */
         }
-        /* >>> FIN MODIFICACIÓN <<< */
+        
 
 
         /* Barra de Progreso */
@@ -297,7 +296,7 @@
             font-size: 1.0em; /* REDUCIDO: de 1.1em a 1.0em */
             outline: none;
         }
-        /* >>> FIN MODIFICACION <<< */
+        
         
         .search-input::placeholder{ color: var(--muted) }
         
@@ -314,7 +313,7 @@
             transition: background-color 0.2s, color 0.2s;
             font-weight: bold; 
         }
-        /* >>> FIN MODIFICACION <<< */
+       
         
         #skip-button-standalone:hover:not(:disabled) { background-color: #e0e0e0; }
         #skip-button-standalone:disabled { cursor: default; opacity: 0.5; }
@@ -341,7 +340,6 @@
         .suggestion-item { padding:10px 15px; cursor:pointer; color:#ffffff; font-size:1em; text-align:left }
         .suggestion-item:hover { background-color:#333333 }
 
-        /* Estilo del Modal/Game Over (MODIFICADO) */
         #game-over-message {
             position: fixed;
             top:0;
@@ -395,7 +393,7 @@
         /* Estilos de título */
         #game-result {
             font-size: 2.2em;
-            font-weight: 600; /* CAMBIADO: De 700 a 600 para usar Open Sans menos bold */
+            font-weight: 600; 
             text-transform: uppercase;
             margin: 0;
         }
@@ -566,7 +564,7 @@
         }
         .reset-button:hover { color: var(--white); }
 
-        /* >>> INICIO CAMBIOS SOLICITADOS (ROJO EN ESTADO LOSE) <<< */
+      
         .game-over-content.lose .play-again-button {
             background-color: var(--modal-lose); /* Utiliza el rojo de perder */
         }
@@ -574,7 +572,7 @@
         .game-over-content.lose .play-again-button:hover {
             background-color: #570600; /* Rojo más oscuro para hover/interacción */
         }
-        /* >>> FIN CAMBIOS SOLICITADOS <<< */
+        
         
         /* responsive */
         @media (max-width:850px) { 
@@ -683,10 +681,9 @@
 
     <script>
     // -----------------------------------------------------
-    // BIBLIOTECA MP3 
+
     const biblioteca = [
-        // la pista debe durar al menos 15 segundos para que esto funcione
-        // inicios[0] debe ser el punto de partida de la pista de 15s
+        
         { nombre: "CHOOSEY - 1/2 Groupie", archivo: "music/CHOOSEY - 1-2 groupie.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
         { nombre: "CHOOSEY - ADOPTA POSES", archivo: "music/CHOOSEY - ADOPTA POSES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
         { nombre: "CHOOSEY - SI NO ME CONOCES", archivo: "music/CHOOSEY - SI NO ME CONOCES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
@@ -839,7 +836,7 @@
         { nombre: "cero, TURROBABY - Slat", archivo: "music/cero, TURROBABY - Slat.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
 
 
-        // agrega tus temas aca...
+        // { nombre: "", archivo: "music/", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
     ];
 
 
