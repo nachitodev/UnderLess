@@ -374,39 +374,36 @@
     font-family: 'ChillFon  ', sans-serif;
 }
 
-        #game-over-message {
+#game-over-message {
             position: fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background-color: rgba(0,0,0,0.9);
-            z-index:200;
-            display:flex; 
-            align-items:center;
-            justify-content:center;
-            text-align:center;
-            box-sizing: border-box;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 200;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s, visibility 0.3s;
+            pointer-events: none;
         }
         #game-over-message.show { 
             opacity: 1; 
-            visibility: visible; 
+            visibility: visible;
+            pointer-events: auto;
         }
 
         .game-over-content {
-            background-color: var(--modal-bg-body); /* Fondo de la parte de abajo */
-            padding: 0; /* padding se moverá al body y header */
+            background-color: var(--modal-bg-body);
+            padding: 0;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
             max-width: 90%;
             width: 400px;
             display: flex;
             flex-direction: column;
-            gap: 0; /* eliminar gap entre secciones */
-            overflow: hidden; /* para contener los border-radius */
+        
         }
         
         .game-over-header {
@@ -1698,5 +1695,7 @@ function ajustarEscala() {
 window.addEventListener("resize", ajustarEscala);
 window.addEventListener("load", ajustarEscala);
 </script>
+</body>
+</html>
 </body>
 </html>
