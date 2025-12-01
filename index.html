@@ -47,7 +47,7 @@
             --modal-bg-body: #212425; 
             
             /* NUEVO COLOR PARA SKIP (GRIS OSCURO) */
-            --skip-color: #303436; 
+            --skip-color: #313536; 
 
             /* NUEVOS COLORES PARA RACHA */
             --streak-zero: var(--muted); 
@@ -66,17 +66,21 @@
             align-items: center;
             min-height: 100vh;
             justify-content: flex-start; 
-            overflow-x: hidden; 
-            overflow-y: hidden; 
             
-            
-            zoom: 1.10; 
+            zoom: 1.12; 
            
         }
         
         /* AÑADIDO: Forzar fuente en botones e inputs para asegurar el cambio */
+
         
-    
+        
+
+#ui-root {
+    width: 900px; /* tu tamaño base */
+    height: 950px; /* altura base */
+    transform-origin: top center;
+}
         
         
         /* CAMBIO EN HEADER PARA CENTRAR EL LOGO Y EL EMOTE VERTICALMENTE */
@@ -367,7 +371,7 @@
         .suggestion-item { padding:10px 15px; cursor:pointer; color:#ffffff; font-size:1em; text-align:left }
         .suggestion-item:hover { background-color:#333333 }
         .suggestion-item {
-    font-family: 'ChillFont', sans-serif;
+    font-family: 'ChillFon  ', sans-serif;
 }
 
         #game-over-message {
@@ -741,7 +745,8 @@
 
     const biblioteca = [
         
-               { nombre: "CHOOSEY - ADOPTA POSES", archivo: "music/CHOOSEY - ADOPTA POSES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
+        { nombre: "CHOOSEY - 1/2 Groupie", archivo: "music/CHOOSEY - 1-2 groupie.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
+        { nombre: "CHOOSEY - ADOPTA POSES", archivo: "music/CHOOSEY - ADOPTA POSES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
         { nombre: "CHOOSEY - SI NO ME CONOCES", archivo: "music/CHOOSEY - SI NO ME CONOCES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
         { nombre: "LOLO , CHOOSEY - QUÉ PUEDE PASAR", archivo: "music/LOLO , CHOOSEY - QUÉ PUEDE PASAR.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
         { nombre: "CHOOSEY - 2 SAMPLEOS", archivo: "music/CHOOSEY - 2 SAMPLEOS.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
@@ -840,6 +845,7 @@
          { nombre: "Doly Flackko - PIOLA VAGO", archivo: "music/Doly Flackko - PIOLA VAGO.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "Doly Flackko - Uber", archivo: "music/Doly Flackko - Uber.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "Doly Flackko - TRES TRISTES TIGUERES", archivo: "music/Doly Flackko - TRES TRISTES TIGUERES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
+         { nombre: "valuto, ramma - sola", archivo: "music/valuto, ramma - sola.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "Blagh, Agush  - TIBURON", archivo: "music/Blagh, Agush  - TIBURON.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "Blagh  - GET IT UP", archivo: "music/Blagh  - GET IT UP.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "Blagh  - High", archivo: "music/Blagh  - High.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
@@ -938,6 +944,8 @@
          { nombre: "jovenalien - No vale la pena enojarse", archivo: "music/jovenalien - No vale la pena enojarse.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "KERCHAK, PANCHITOLEFLEUR - ANOTHER NIGHT WITH THE UNCLE", archivo: "music/KERCHAK, PANCHITOLEFLEUR - ANOTHER NIGHT WITH THE UNCLE.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "KERCHAK, PANCHITOLEFLEUR - Tamo a Full", archivo: "music/KERCHAK, PANCHITOLEFLEUR - Tamo a Full.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
+
+
         // { nombre: "", archivo: "music/", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
     ];
 
@@ -1645,5 +1653,49 @@
         pauseAudioInternal();
     });
     </script>
+<script>
+function ajustarEscala() {
+    const ancho = window.innerWidth;
+    const alto = window.innerHeight;
+
+    // resolucion base de tu UI (aprox por tu diseño)
+    const baseX = 900;
+    const baseY = 950;
+
+    // calculo escala proporcional
+    const escala = Math.min(ancho / baseX, alto / baseY);
+
+    document.body.style.transform = `scale(${escala})`;
+    document.body.style.transformOrigin = "top center";
+}
+
+window.addEventListener("resize", ajustarEscala);
+window.addEventListener("load", ajustarEscala);
+</script>
+<script>
+function ajustarEscala() {
+    const baseAncho = 900;
+    const baseAlto = 950;
+
+    const escala = Math.min(
+        window.innerWidth / baseAncho,
+        window.innerHeight / baseAlto
+    );
+
+    // aplicar solo al contenedor interno
+    const ui = document.getElementById("ui-root");
+    ui.style.transform = `scale(${escala})`;
+
+    // centrarlo
+    ui.style.position = "absolute";
+    ui.style.left = `50%`;
+    ui.style.top = `0`;
+    ui.style.transformOrigin = "top center";
+    ui.style.transform = `translateX(-50%) scale(${escala})`;
+}
+
+window.addEventListener("resize", ajustarEscala);
+window.addEventListener("load", ajustarEscala);
+</script>
 </body>
 </html>
