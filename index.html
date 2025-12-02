@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="Permissions-Policy" content="autoplay=*, encrypted-media=*, accelerometer=*, gyroscope=*, picture-in-picture=*, clipboard-write=*, web-share=*">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Permissions-Policy"
+        content="autoplay=*, encrypted-media=*, accelerometer=*, gyroscope=*, picture-in-picture=*, clipboard-write=*, web-share=*">
     <title>UnderLess (Beta)</title>
     <link rel="icon" href="underless.ico">
     <style>
+        /* CAMBIO: Eliminar import de Google Fonts y agregar @font-face para fuentes locales */
         @font-face {
             font-family: 'UnderLessFont';
             src: url('fonts/UnderLess_font.ttf') format('truetype');
             font-weight: 800;
             font-style: normal;
         }
-        
+
         @font-face {
             font-family: 'OtherTextFont';
             src: url('fonts/other_text.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
-        
-                @font-face {
+
+        @font-face {
             font-family: 'ChillFont';
             src: url('fonts/chill_font.ttf') format('truetype');
             font-weight: normal;
@@ -35,178 +38,244 @@
             --accent: #55b725;
             --bar-bg: #27282a;
             --white: #ffffff;
-            --bar-active: #ffffff; 
-            --grisesito:  #575757; 
+            --bar-active: #ffffff;
+            --grisesito: #575757;
 
             --modal-win: var(--accent);
-            --modal-lose: #b42828; 
+            --modal-lose: #b42828;
             --modal-title-win: #ffffff;
             --modal-title-lose: #ffffff;
-            --modal-bg-header: #962020; 
-            --modal-bg-body: #212425; 
-            
+            --modal-bg-header: #962020;
+            --modal-bg-body: #212425;
+
             /* NUEVO COLOR PARA SKIP (GRIS OSCURO) */
-            --skip-color: #313536; 
+            --skip-color: #313536;
 
             /* NUEVOS COLORES PARA RACHA */
-            --streak-zero: var(--muted); 
-            --streak-low: #d47f00; 
-            --streak-medium: #ff6600; 
-            --streak-high: #ff0000; 
+            --streak-zero: var(--muted);
+            --streak-low: #d47f00;
+            --streak-medium: #ff6600;
+            --streak-high: #ff0000;
         }
-        html,body{height:100%;margin:0}
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            /* Evitar scroll */
+        }
+
         body {
             background-color: var(--bg);
             color: var(--white);
-            font-family: 'OtherTextFont', sans-serif; /* CAMBIO: Fuente local para todo el body */
+            font-family: 'OtherTextFont', sans-serif;
+            /* CAMBIO: Fuente local para todo el body */
             margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            justify-content: flex-start; 
-            
-           
+            justify-content: flex-start;
+
+
+
+
         }
-        
-        /* Forzar fuente en botones e inputs para asegurar el cambio */
 
-        
-        
+        /* AÑADIDO: Forzar fuente en botones e inputs para asegurar el cambio */
 
-#ui-root {
-    width: 900px; /* tu tamaño base */
-    height: 950px; /* altura base */
-    transform-origin: top center;
-}
-        
-        
+
+
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        #ui-root {
+            /* Eliminado: ya no usamos escalado fijo */
+            display: none;
+        }
+
+
         /* CAMBIO EN HEADER PARA CENTRAR EL LOGO Y EL EMOTE VERTICALMENTE */
         header {
             width: 100%;
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 25px 10px 10px 25px; 
+            padding: 10px;
+            /* Reducido */
             box-sizing: border-box;
-            max-width: 900px;
-            position: relative; 
+            flex: 0 0 auto;
+            /* No crecer ni encoger */
+            position: relative;
             z-index: 50;
         }
 
-        header .logo { 
-            font-family: 'UnderLessFont', sans-serif; /* CAMBIO: Fuente local para el logo */
-            font-size: 3.2em; 
-            font-weight: 800; 
-            letter-spacing: -1px; 
-            cursor: default; 
-            text-transform: none; /* CAMBIO: No uppercase para permitir U mayúscula y resto minúscula */
+        header .logo {
+            font-family: 'UnderLessFont', sans-serif;
+            /* CAMBIO: Fuente local para el logo */
+            font-size: 3.8em;
+            font-weight: 800;
+            letter-spacing: -1px;
+            cursor: default;
+            text-transform: none;
+            /* CAMBIO: No uppercase para permitir U mayúscula y resto minúscula */
+            --colorunder: #0082c4;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+
         }
-        
+
         /* ESTILO PARA EL EMOTE */
         #emote-7tv {
-            width: 230px; 
-            height: 60px; 
-            margin-top: 3px; 
-            display: block; 
+            width: 230px;
+            height: 60px;
+            margin-top: 3px;
+            display: block;
         }
 
         main {
-            flex-grow: 1;
+            flex: 1 1 auto;
+            /* Ocupar espacio restante */
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: 900px;
-            padding: 0 20px 50px 20px; 
+            padding: 0 10px 10px 10px;
             box-sizing: border-box;
-            margin-top: 40px; 
-            position: relative; 
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            /* Contenido interno scrolleable si es necesario, pero trataremos de evitarlo */
+            justify-content: space-evenly;
+            /* Distribuir espacio verticalmente */
         }
-        
-        
-        .guess-boxes { 
-            width: 100%; 
-            margin-bottom: 50px; 
-            max-width: 550px; 
+
+
+        .guess-boxes {
+            width: 100%;
+            margin-bottom: 20px;
+            max-width: 550px;
+            flex: 1 1 auto;
+            /* Crecer y encoger */
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-height: 0;
+            /* Importante para flexbox */
+            max-height: 50%;
+            /* Limite de altura */
         }
+
         .guess-box {
-            
-            background-color: var(--bg); /* fondo igual al body */
-            border: 2px solid var(--panel); /* borde del color de acento */
-            border-radius: 4px; 
-            padding: 13px 18px; /* reducido el padding para compensar el borde de 2px */
-            margin-bottom: 8px; 
+
+            background-color: var(--bg);
+            /* fondo igual al body */
+            border: 2px solid var(--panel);
+            /* borde del color de acento */
+            border-radius: 4px;
+            padding: 5px 10px;
+            /* Reducido significativamente */
+            margin-bottom: 0;
+            /* Controlado por gap */
             color: var(--muted);
-            height: 13px;
-            display: flex; 
+            height: auto;
+            /* Altura automática */
+            min-height: 0;
+            /* Permitir que se encoja más allá del contenido si es necesario */
+            flex: 1;
+            /* Distribuir espacio equitativamente */
+            display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center; 
-            font-size: 1.2em;
+            text-align: center;
+            font-size: 1.1em;
+            /* Ligeramente reducido para ajustar */
             font-weight: 500;
-            transition: background-color 0.2s, border-color 0.2s; /* transición para el cambio de color */
+            transition: background-color 0.2s, border-color 0.2s;
+            /* transición para el cambio de color */
         }
-        
+
         /* ESTADO POR DEFECTO: CASILLA VACÍA */
         .guess-box:empty {
-            background-color: var(--bg); 
-            border: 2px solid var(--panel); 
+            background-color: var(--bg);
+            border: 2px solid var(--panel);
         }
 
         /* ESTADO: CASILLA LLENA (ANTES DE SER JUZGADA) */
         .guess-box:not(:empty):not(.correct):not(.incorrect):not(.skipped) {
-            background-color: var(--panel); /* color de panel por si hay texto temporal */
+            background-color: var(--panel);
+            /* color de panel por si hay texto temporal */
             border-color: var(--panel);
         }
-        
+
         .guess-box.correct {
-            background-color: var(--accent); /* Verde */
+            background-color: var(--accent);
+            /* Verde */
             color: white;
-            animation: none; 
-            border-color: var(--accent); /* relleno completo */
+            animation: none;
+            border-color: var(--accent);
+            /* relleno completo */
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
+
         .guess-box.incorrect {
-            background-color: #a11515; /* Rojo oscuro */
+            background-color: #a11515;
+            /* Rojo oscuro */
             color: white;
-            border-color: #a11515; /* relleno completo */
+            border-color: #a11515;
+            /* relleno completo */
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-        
+
         /* NUEVO ESTADO PARA SKIP */
         .guess-box.skipped {
-            background-color: var(--skip-color); /* Gris oscuro */
+            background-color: var(--skip-color);
+            /* Gris oscuro */
             color: white;
-            border-color: var(--skip-color); /* relleno completo */
+            border-color: var(--skip-color);
+            /* relleno completo */
         }
-        
+
 
 
         /* Barra de Progreso */
         .progress-bar-container {
             width: 100%;
-            max-width: 900px; 
-            height: 25px; 
+            max-width: 900px;
+            height: 25px;
             background-color: var(--bar-bg);
-            border-radius: 0; 
+            border-radius: 0;
             position: relative;
-            margin-bottom: 40px; 
+            margin-bottom: 40px;
             overflow: visible;
         }
+
         .progress-bar-fill {
             position: absolute;
             top: 0;
             left: 0;
             height: 100%;
-            background-color: var(--bar-active); 
+            background-color: var(--bar-active);
             width: 0%;
             transition: width 0.05s linear;
             z-index: 1;
         }
+
         .segments-overlay {
             position: relative;
             display: flex;
@@ -215,179 +284,237 @@
             z-index: 2;
             pointer-events: none;
         }
-        .progress-segment { 
-            position: relative; 
-            height: 100%; 
+
+        .progress-segment {
+            position: relative;
+            height: 100%;
         }
-        .progress-segment:last-child { border-right: none; }
-        
+
+        .progress-segment:last-child {
+            border-right: none;
+        }
+
         .segment-divider {
             position: absolute;
             top: 0;
             height: 100%;
-            width: 1px; 
+            width: 1px;
             background-color: var(--bg);
             z-index: 3;
-            transform: translateX(-50%); 
+            transform: translateX(-50%);
         }
 
         /* Marcador de tiempo (flecha estática) */
         .timer-text {
             position: absolute;
-            top: -35px; 
+            top: -35px;
             left: 0%;
             transform: translateX(-50%);
             font-size: 0.9em;
             color: var(--white);
             white-space: nowrap;
-            font-weight: bold; 
-            transition: none; 
+            font-weight: bold;
+            transition: none;
             z-index: 10;
         }
+
         .timer-text::after {
             content: '';
             position: absolute;
             left: 50%;
-            bottom: -8px; 
+            bottom: -8px;
             transform: translateX(-50%);
-            width: 0;height:0;
-            border-left:5px solid transparent;
-            border-right:5px solid transparent;
-            border-top:6px solid var(--white);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid var(--white);
         }
 
         /* Boton de Play/Pause */
         button.play-button {
             background-color: var(--accent);
             border-radius: 50%;
-            width: 50px; 
-            height: 50px; 
+            width: 50px;
+            height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
             position: relative;
             margin-top: 10px;
-            margin-bottom: 40px; 
+            margin-bottom: 40px;
             opacity: 1;
             border: none;
         }
-        button.play-button[disabled] { opacity: 0.5; cursor: default; }
-        button.play-button:not([disabled]):active { transform: scale(0.95); }
-        button.play-button svg { 
-            fill: white; 
-            width: 28px; 
-            height: 28px; 
-            margin-left:2px 
+
+        button.play-button[disabled] {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        button.play-button:not([disabled]):active {
+            transform: scale(0.95);
+        }
+
+        button.play-button svg {
+            fill: white;
+            width: 28px;
+            height: 28px;
+            margin-left: 2px
         }
 
         /* Controles de Busqueda */
         .search-controls-container {
             width: 100%;
-            max-width: 900px; 
-            margin-top: 0; 
+            max-width: 900px;
+            margin-top: 0;
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             align-items: center;
             gap: 15px;
-            position: relative; 
+            position: relative;
         }
+
         .controls-row {
-            display:flex;
-            align-items:center;
-            width:100%;
-            justify-content:center;
-            gap: 10px; 
-        }
-        .search-container { 
             display: flex;
-            flex-grow: 1; 
-            max-width: 600px; 
+            align-items: center;
+            width: 100%;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .search-container {
+            display: flex;
+            flex-grow: 1;
+            max-width: 600px;
             background-color: var(--panel);
-            border-radius: 4px; 
+            border-radius: 4px;
             overflow: hidden;
             align-items: center;
-            box-shadow: none; 
+            box-shadow: none;
             opacity: 1;
             transition: opacity 0.3s;
         }
-        .search-container.disabled { opacity: 0.5; pointer-events: none; }
-        .search-container svg { fill: var(--muted); margin-left: 12px; width: 18px; height: 18px; }
-        
+
+        .search-container.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .search-container svg {
+            fill: var(--muted);
+            margin-left: 12px;
+            width: 18px;
+            height: 18px;
+        }
+
         /* >>> MODIFICACION PARA HACER LA CAJA MAS CHICA <<< */
         .search-input {
             flex-grow: 1;
-            padding: 12px 15px; /* REDUCIDO: de 18px a 12px */
+            padding: 12px 15px;
+            /* REDUCIDO: de 18px a 12px */
             background: transparent;
             border: none;
             color: white;
-            font-size: 1.0em; /* REDUCIDO: de 1.1em a 1.0em */
+            font-size: 1.0em;
+            /* REDUCIDO: de 1.1em a 1.0em */
             outline: none;
         }
-        
-        
-        .search-input::placeholder{ color: var(--muted) }
-        
+
+
+        .search-input::placeholder {
+            color: var(--muted)
+        }
+
         /* Botón Skip */
         /* >>> MODIFICACION PARA HACER EL BOTON SKIP MAS CHICO <<< */
         #skip-button-standalone {
-            background-color: var(--white); 
-            color: var(--panel); 
+            background-color: var(--white);
+            color: var(--panel);
             border: none;
-            padding: 12px 25px; /* REDUCIDO: de 18px/35px a 12px/25px */
-            font-size: 1.0em; /* REDUCIDO: de 1.1em a 1.0em */
+            padding: 12px 25px;
+            /* REDUCIDO: de 18px/35px a 12px/25px */
+            font-size: 1.0em;
+            /* REDUCIDO: de 1.1em a 1.0em */
             cursor: pointer;
-            border-radius: 4px; 
+            border-radius: 4px;
             transition: background-color 0.2s, color 0.2s;
-            font-weight: bold; 
+            font-weight: bold;
         }
-       
-        
-        #skip-button-standalone:hover:not(:disabled) { background-color: #e0e0e0; }
-        #skip-button-standalone:disabled { cursor: default; opacity: 0.5; }
 
-        #audio-player { display:none }
+
+        #skip-button-standalone:hover:not(:disabled) {
+            background-color: #e0e0e0;
+        }
+
+        #skip-button-standalone:disabled {
+            cursor: default;
+            opacity: 0.5;
+        }
+
+        #audio-player {
+            display: none
+        }
 
         /* Lista de Sugerencias (CORRECCIÓN: Subir) */
-        #songs-list { 
+        #songs-list {
             position: absolute;
             background-color: var(--panel);
             border-radius: 4px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
             width: 100%;
-            max-width: 600px; 
-            top: auto; 
-            bottom: calc(100% + 15px); /* Posicion encima del controls-row */
+            max-width: 600px;
+            top: auto;
+            bottom: calc(100% + 15px);
+            /* Posicion encima del controls-row */
             z-index: 1000;
             max-height: 200px;
             overflow-y: auto;
             display: none;
             transform-origin: bottom;
         }
-        #songs-list.show { display:block; }
-        .suggestion-item { padding:10px 15px; cursor:pointer; color:#ffffff; font-size:1em; text-align:left }
-        .suggestion-item:hover { background-color:#333333 }
-        .suggestion-item {
-    font-family: 'ChillFon  ', sans-serif;
-}
 
-#game-over-message {
+        #songs-list.show {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            color: #ffffff;
+            font-size: 1em;
+            text-align: left
+        }
+
+        .suggestion-item:hover {
+            background-color: #333333
+        }
+
+        .suggestion-item {
+            font-family: 'ChillFon  ', sans-serif;
+        }
+
+        #game-over-message {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             z-index: 200;
-            display: flex; 
+            display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s, visibility 0.3s;
             pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.6);
         }
-        #game-over-message.show { 
-            opacity: 1; 
+
+        #game-over-message.show {
+            opacity: 1;
             visibility: visible;
             pointer-events: auto;
         }
@@ -401,18 +528,21 @@
             width: 400px;
             display: flex;
             flex-direction: column;
-        
+
         }
-        
+
         .game-over-header {
-            padding: 20px 30px; /* Padding del header */
-            background-color: var(--modal-bg-header); /* Fondo rojo/verde del header */
+            padding: 20px 30px;
+            /* Padding del header */
+            background-color: var(--modal-bg-header);
+            /* Fondo rojo/verde del header */
             color: var(--white);
             text-align: center;
         }
 
         .game-over-body {
-            padding: 30px; /* Padding del cuerpo principal */
+            padding: 30px;
+            /* Padding del cuerpo principal */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -422,25 +552,29 @@
         /* Estilos de título */
         #game-result {
             font-size: 2.2em;
-            font-weight: 600; 
+            font-weight: 600;
             text-transform: uppercase;
             margin: 0;
         }
-        
+
         /* Color dinámico para el header */
-        .game-over-content.win .game-over-header { 
-            background-color: var(--modal-win); /* Verde */
+        .game-over-content.win .game-over-header {
+            background-color: var(--modal-win);
+            /* Verde */
             color: var(--modal-title-win);
         }
-        .game-over-content.lose .game-over-header { 
-            background-color: var(--modal-lose); /* Rojo */
+
+        .game-over-content.lose .game-over-header {
+            background-color: var(--modal-lose);
+            /* Rojo */
             color: var(--modal-title-lose);
         }
 
         /* Estilo de la respuesta */
         #correct-answer-container {
             font-size: 1.1em;
-            color: var(--white); /* Texto principal blanco */
+            color: var(--white);
+            /* Texto principal blanco */
             margin: 0;
             text-align: center;
         }
@@ -471,7 +605,7 @@
             transition: background-color 0.2s;
             width: 100%;
             box-sizing: border-box;
-            margin-bottom: 0px; 
+            margin-bottom: 0px;
             /* Para icon + text */
             display: flex;
             align-items: center;
@@ -484,7 +618,12 @@
             color: white;
             margin-top: 10px;
         }
-        .play-again-button:hover { background-color: #4a9e20; } /* Ajuste de hover para contraste en estado WIN (verde) */
+
+        .play-again-button:hover {
+            background-color: #4a9e20;
+        }
+
+        /* Ajuste de hover para contraste en estado WIN (verde) */
 
 
         /* NUEVOS ESTILOS PARA REPRODUCTOR COMPLETO */
@@ -494,17 +633,19 @@
             flex-direction: column;
             gap: 10px;
             padding: 15px 0 5px 0;
-            border-top: 1px solid #444; /* Separador visual más claro */
+            border-top: 1px solid #444;
+            /* Separador visual más claro */
             margin-top: 10px;
         }
 
         /* CAMBIO: Centrar botón y apilar tiempo debajo */
         .full-player-controls {
             display: flex;
-            flex-direction: column; 
+            flex-direction: column;
             align-items: center;
-            justify-content: center; 
-            gap: 5px; /* Espacio entre el botón y el tiempo */
+            justify-content: center;
+            gap: 5px;
+            /* Espacio entre el botón y el tiempo */
         }
 
         .mini-play-button {
@@ -519,13 +660,17 @@
             border: none;
             cursor: pointer;
         }
+
         .mini-play-button svg {
             width: 18px;
             height: 18px;
             fill: white;
             margin-left: 2px;
         }
-        .mini-play-button:active { transform: scale(0.95); }
+
+        .mini-play-button:active {
+            transform: scale(0.95);
+        }
 
 
         /* Slider de Búsqueda (Seeker) */
@@ -533,50 +678,77 @@
             -webkit-appearance: none;
             appearance: none;
             width: 100%;
-            height: 6px; 
+            height: 6px;
             background: var(--bar-bg);
             border-radius: 999px;
             outline: none;
             cursor: pointer;
         }
+
         #full-song-seeker::-webkit-slider-thumb {
-            -webkit-appearance:none; appearance:none;
-            width:12px;height:12px;border-radius:50%;background:var(--grisesito);box-shadow:0 1px 2px rgba(0,0,0,0.6);cursor:pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--grisesito);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
         }
+
         #full-song-seeker::-moz-range-thumb {
-            width:12px;height:12px;border-radius:50%;background:var(--grisesito);box-shadow:0 1px 2px rgba(0,0,0,0.6);cursor:pointer;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--grisesito);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
         }
 
 
         /* volumen style */
         .volume-container {
-            position: fixed; 
+            position: fixed;
             top: 20px;
             right: 30px;
             width: 160px;
             display: flex;
             align-items: center;
             gap: 8px;
-            background: transparent; 
+            background: transparent;
             justify-content: flex-end;
             padding: 0;
-            z-index: 100; 
+            z-index: 100;
         }
-        .volume-icon { width:18px; height:18px; opacity:0.9; fill:#bfbfbf }
+
+        .volume-icon {
+            width: 18px;
+            height: 18px;
+            opacity: 0.9;
+            fill: #bfbfbf
+        }
+
         input[type=range].volume-slider {
             -webkit-appearance: none;
             appearance: none;
             width: 120px;
-            height: 4px; 
+            height: 4px;
             background: var(--bar-bg);
             border-radius: 999px;
             outline: none;
         }
+
         input[type=range].volume-slider::-webkit-slider-thumb {
-            -webkit-appearance:none; appearance:none;
-            width:10px;height:10px;border-radius:50%;background:#ffffff;box-shadow:0 1px 2px rgba(0,0,0,0.6);cursor:pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
         }
-        
+
         /* Boton de Reiniciar discreto */
         .reset-button {
             position: absolute;
@@ -591,31 +763,69 @@
             border-radius: 5px;
             transition: color 0.2s;
         }
-        .reset-button:hover { color: var(--white); }
 
-      
+        .reset-button:hover {
+            color: var(--white);
+        }
+
+
         .game-over-content.lose .play-again-button {
-            background-color: var(--modal-lose); /* Utiliza el rojo de perder */
+            background-color: var(--modal-lose);
+            /* Utiliza el rojo de perder */
         }
 
         .game-over-content.lose .play-again-button:hover {
-            background-color: #570600; /* Rojo más oscuro para hover/interacción */
+            background-color: #570600;
+            /* Rojo más oscuro para hover/interacción */
         }
-        
-        
+
+
         /* responsive */
-        @media (max-width:850px) { 
-            body { zoom: 1; overflow-y: auto; } 
-            .guess-boxes { max-width: 90%; }
-            .progress-bar-container { max-width: 90%; }
-            .search-controls-container { max-width: 90%; }
-            .search-container { max-width: calc(90% - 70px); } 
-            #songs-list { max-width: calc(90% - 70px); } 
-            .volume-container { display: none; } 
-            .reset-button { left: 10px; }
-            header { padding-right: 10px; padding-left: 10px; }
-            .game-over-content { padding: 0; } /* Eliminado padding */
-            
+        @media (max-width:850px) {
+            body {
+                zoom: 1;
+                overflow-y: auto;
+            }
+
+            .guess-boxes {
+                max-width: 90%;
+            }
+
+            .progress-bar-container {
+                max-width: 90%;
+            }
+
+            .search-controls-container {
+                max-width: 90%;
+            }
+
+            .search-container {
+                max-width: calc(90% - 70px);
+            }
+
+            #songs-list {
+                max-width: calc(90% - 70px);
+            }
+
+            .volume-container {
+                display: none;
+            }
+
+            .reset-button {
+                left: 10px;
+            }
+
+            header {
+                padding-right: 10px;
+                padding-left: 10px;
+            }
+
+            .game-over-content {
+                padding: 0;
+            }
+
+            /* Eliminado padding */
+
         }
 
         /* NUEVO ESTILO PARA RACHA */
@@ -624,14 +834,18 @@
             font-weight: bold;
             margin-top: 10px;
             color: var(--accent);
+            user-select: none;
+            pointer-events: none;
         }
-        
+
         /* === NUEVO SISTEMA DE COLORES PARA RACHA (reemplaza el anterior) === */
         :root {
             /* Racha 1-10: de verde a rojo */
-            --streak-1: #55b725;     /* verde original */
+            --streak-1: #55b725;
+            /* verde original */
             --streak-5: #b79500;
-            --streak-10: #ff3300;    /* rojo fuerte */
+            --streak-10: #ff3300;
+            /* rojo fuerte */
 
             /* Racha 11-20: rojo cada vez más oscuro/intenso */
             --streak-15: #cc0000;
@@ -649,71 +863,126 @@
             font-size: 1.2em;
             font-weight: bold;
             margin-top: 10px;
-            color: var(--streak-1); /* color por defecto */
-            transition: color 0.5s ease; /* animación suave al cambiar racha */
+            color: var(--streak-1);
+            /* color por defecto */
+            transition: color 0.5s ease;
+            /* animación suave al cambiar racha */
+        }
+
+        /* NUEVO: Estilo para etiqueta de creador */
+        #creator-tag {
+            font-size: 0.8em;
+            color: var(--muted);
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* NUEVO: Estilo para streak-saver-ui */
+        #streak-saver-ui {
+            font-size: 1.0em;
+            color: var(--white);
+            text-align: center;
+            margin-top: 10px;
+            padding: 5px;
+            background-color: var(--panel);
+            border-radius: 4px;
+            width: auto;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        #streak-saver-ui img {
+            width: 20px;
+            height: 20px;
+            /* Forzar altura igual al ancho */
+            object-fit: contain;
+            margin-left: 0;
+            /* Quitar margen extra si usamos gap */
+            vertical-align: middle;
         }
     </style>
 </head>
+
 <body>
-    <button class="reset-button" onclick="resetGame()">REINICIAR</button>
-    
-    <header>
-        <div class="logo">UnderLess</div>
-         <img id="emote-7tv" src="img/peepo-band.gif" alt="peepo band">
-    </header>
+    <button class="reset-button" onclick="resetGame(true)">REINICIAR</button>
 
-    <div class="volume-container" title="volumen">
-        <svg class="volume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
-        <input id="volume-slider" class="volume-slider" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="volumen">
-    </div>
+    <div id="game-container">
+        <header>
+            <div class="logo">UnderLess</div>
+            <img id="emote-7tv" src="img/peepo-band.gif" alt="peepo band">
+        </header>
 
-    <main>
-        <div class="guess-boxes" id="guess-boxes">
-            <div class="guess-box"></div>
-            <div class="guess-box"></div>
-            <div class="guess-box"></div>
-            <div class="guess-box"></div>
-            <div class="guess-box"></div>
-            <div class="guess-box"></div>
+        <div id="ui-root-content">
+            <!-- Contenido que estaba en ui-root -->
+            <p id="creator-tag">by: invalame</p>
         </div>
-    
 
-        <div class="progress-bar-container" id="progress-bar">
-            <div class="segments-overlay" id="segments-overlay"></div>
-            <div class="progress-bar-fill" id="progress-bar-fill"></div>
-            <span class="timer-text" id="current-timer-text" style="left:0%">0.1s</span>
+        <div class="volume-container" title="volumen">
+            <svg class="volume-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 9v6h4l5 5V4L7 9H3z" />
+            </svg>
+            <input id="volume-slider" class="volume-slider" type="range" min="0" max="1" step="0.01" value="0.8"
+                aria-label="volumen">
         </div>
-        <div id="streak">Racha: 0</div>
-        <button class="play-button" id="play-button" onclick="playSnippet()" disabled aria-label="escuchar fragmento">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        </button>
-        
-        <div class="search-controls-container">
-            <div class="controls-row">
-                <div class="search-container" id="search-container">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20.29 21l.71-.71L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                    </svg>
-                    <input type="text" class="search-input" id="search-input" placeholder="Busca un banger" autocomplete="off">
-                </div>
-                <button id="skip-button-standalone" onclick="handleSkip()">Skip</button>
+
+        <main>
+            <div class="guess-boxes" id="guess-boxes">
+                <div class="guess-box"></div>
+                <div class="guess-box"></div>
+                <div class="guess-box"></div>
+                <div class="guess-box"></div>
+                <div class="guess-box"></div>
+                <div class="guess-box"></div>
             </div>
-            <div id="songs-list" class="songs-list" aria-hidden="true"></div>
-        </div>
-    </main>
+
+
+            <div class="progress-bar-container" id="progress-bar">
+                <div class="segments-overlay" id="segments-overlay"></div>
+                <div class="progress-bar-fill" id="progress-bar-fill"></div>
+                <span class="timer-text" id="current-timer-text" style="left:0%">0.1s</span>
+            </div>
+            <div id="streak">Racha: 0</div>
+            <button class="play-button" id="play-button" onclick="playSnippet()" disabled
+                aria-label="escuchar fragmento">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+            </button>
+
+            <div class="search-controls-container">
+                <div class="controls-row">
+                    <div class="search-container" id="search-container">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20.29 21l.71-.71L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                        </svg>
+                        <input type="text" class="search-input" id="search-input" placeholder="Busca un banger"
+                            autocomplete="off">
+                    </div>
+                    <button id="skip-button-standalone" onclick="handleSkip()">Skip</button>
+                </div>
+                <div id="songs-list" class="songs-list" aria-hidden="true"></div>
+            </div>
+            <div id="streak-saver-ui">salvadores de racha: 3</div>
+        </main>
+    </div> <!-- Cierre de game-container -->
 
     <div id="game-over-message" role="dialog" aria-modal="true">
         <div class="game-over-content" id="game-over-content">
             <div class="game-over-header">
-                 <h2 id="game-result"></h2>
+                <h2 id="game-result"></h2>
             </div>
-           
+
             <div class="game-over-body">
                 <div id="correct-answer-container">
                     <span class="label" id="answer-label"></span>
                     <span id="correct-answer"></span>
                 </div>
-                
+
                 <div class="full-player-container">
                     <div class="full-player-bar">
                         <input type="range" id="full-song-seeker" min="0" max="100" value="0">
@@ -721,28 +990,31 @@
                     <div class="full-player-controls">
                         <button class="action-button mini-play-button" id="full-song-toggle" onclick="toggleFullSong()">
                             <span id="full-song-icon-play">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
                             </span>
                             <span id="full-song-icon-pause" style="display: none;">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                                </svg>
                             </span>
                         </button>
                         <span id="full-song-time">0:00 / 0:00</span>
                     </div>
                 </div>
-                 <button class="action-button play-again-button" onclick="resetGame()">una ma</button>
+                <button class="action-button play-again-button" onclick="resetGame(true)">una ma</button>
             </div>
         </div>
     </div>
     <audio id="audio-player" preload="auto"></audio>
 
     <script>
-    // -----------------------------------------------------
+        // -----------------------------------------------------
 
-    const biblioteca = [
-        
-        { nombre: "CHOOSEY - 1/2 Groupie", archivo: "music/CHOOSEY - 1-2 groupie.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-        { nombre: "CHOOSEY - ADOPTA POSES", archivo: "music/CHOOSEY - ADOPTA POSES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
+        const biblioteca = [
+
+            { nombre: "CHOOSEY - ADOPTA POSES", archivo: "music/CHOOSEY - ADOPTA POSES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
         { nombre: "CHOOSEY - SI NO ME CONOCES", archivo: "music/CHOOSEY - SI NO ME CONOCES.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
         { nombre: "LOLO , CHOOSEY - QUÉ PUEDE PASAR", archivo: "music/LOLO , CHOOSEY - QUÉ PUEDE PASAR.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
         { nombre: "CHOOSEY - 2 SAMPLEOS", archivo: "music/CHOOSEY - 2 SAMPLEOS.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
@@ -846,36 +1118,7 @@
          { nombre: "Blagh  - High", archivo: "music/Blagh  - High.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "Blagh - Toxico", archivo: "music/Blagh - Toxico.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "Blagh - 2013", archivo: "music/Blagh - 2013.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "MAGNESIO - WING WANG WOW", archivo: "music/MAGNESIO - WING WANG WOW.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "MAGNESIO - ZLATAN", archivo: "music/MAGNESIO - ZLATAN.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "MAGNESIO - MAS LENTO", archivo: "music/MAGNESIO - MAS LENTO.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "MAGNESIO, White! - GOKU", archivo: "music/MAGNESIO, White! - GOKU.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "MAGNESIO - OLLA POPULAR", archivo: "music/MAGNESIO - OLLA POPULAR.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "143LETI - En mis sueños soy tu novia", archivo: "music/143LETI - En mis sueños soy tu novia.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "143LETI, VALUTO  - COSAS QUE ESTÁN MAL", archivo: "music/143LETI, VALUTO  - COSAS QUE ESTÁN MAL.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "143LETI - EU TE AMO", archivo: "music/143LETI - EU TE AMO.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "LITTLE BOOGIE, EL DOCTOR, RUSHERKING - SOY FAMOSO Y TENGO PLATA", archivo: "music/LITTLE BOOGIE, EL DOCTOR, RUSHERKING - SOY FAMOSO Y TENGO PLATA.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "LITTLE BOOGIE - LOS DEL BOHIO", archivo: "music/LITTLE BOOGIE - LOS DEL BOHIO.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "LITTLE BOOGIE - DEJA DE SUFRIR", archivo: "music/LITTLE BOOGIE - DEJA DE SUFRIR.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "LITTLE BOOGIE - OKUPAS", archivo: "music/LITTLE BOOGIE - OKUPAS.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "LITTLE BOOGIE - COMPA LO HICIMOS", archivo: "music/LITTLE BOOGIE - COMPA LO HICIMOS.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "LITTLE BOOGIE - TODO BIEN TODO CHETO", archivo: "music/LITTLE BOOGIE - TODO BIEN TODO CHETO.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "2UU!, turrobaby - LA GATA GOZA", archivo: "music/2UU!, turrobaby - LA GATA GOZA.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "2UU!, Asan - CELOSA", archivo: "music/2UU!, Asan - CELOSA.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "2UU!, enzocerobulto, Jugo!, Soowney - ESO QUERE TULI", archivo: "music/2UU!, enzocerobulto, Jugo!, Soowney - ESO QUERE TULI.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "cero - como roe.mp3", archivo: "music/cero - como roe.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "cero - t2o", archivo: "music/cero - t2o.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "cero - 1234", archivo: "music/cero - 1234.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "cero - xq soy el villano", archivo: "music/cero - xq soy el villano.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "cero, knak - TOA", archivo: "music/cero, knak - TOA.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "cero - De moda", archivo: "music/cero - De moda.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "White!, magnesio - Shen Long", archivo: "music/White!, magnesio - Shen Long.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "White! - FR", archivo: "music/White! - FR.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "White! - X - RAY", archivo: "music/White! - X - RAY.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "White! - No lo intentes en tu home", archivo: "music/White! - No lo intentes en tu home.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "AFKgoat, cero  - ME QUEMAN LOS DEDOS", archivo: "music/AFKgoat, cero  - ME QUEMAN LOS DEDOS.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "AFKgoat - 1VUELTAINTERMINABLE", archivo: "music/AFKgoat - 1VUELTAINTERMINABLE.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-         { nombre: "AFKgoat - Te caigo mas tarde", archivo: "music/AFKgoat - Te caigo mas tarde.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
+         { nombre: "MAGNESIO - WING WANG WOW", archivo: "music/MAGNESIO - W...(truncated 3921 characters)...oat - Te caigo mas tarde.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "AFKgoat- DEFRENTEMAL", archivo: "music/AFKgoat- DEFRENTEMAL.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "AFKgoat - OSLAVA", archivo: "music/AFKgoat - OSLAVA.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "vahel - .", archivo: "music/vahel - ..mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
@@ -939,759 +1182,793 @@
          { nombre: "jovenalien - No vale la pena enojarse", archivo: "music/jovenalien - No vale la pena enojarse.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "KERCHAK, PANCHITOLEFLEUR - ANOTHER NIGHT WITH THE UNCLE", archivo: "music/KERCHAK, PANCHITOLEFLEUR - ANOTHER NIGHT WITH THE UNCLE.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
          { nombre: "KERCHAK, PANCHITOLEFLEUR - Tamo a Full", archivo: "music/KERCHAK, PANCHITOLEFLEUR - Tamo a Full.mp3", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-
-
-        // { nombre: "", archivo: "music/", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
-    ];
-
-
-    // -----------------------------------------------------
-    // Variables
-    let audioPlayer = document.getElementById('audio-player');
-    let currentSong = {};
-    let guessCount = 0;
-    
-    // Duraciones de intentos
-    const targetDurations = [0.1, 0.5, 2, 4, 8, 15]; 
-    const totalGameDuration = 15;
-    
-    let hasGuessedCorrectly = false;
-    let availableSongs = [];
-    
-    // variables de control de tiempo y snippet
-    let snippetTimeout = null;
-    let timeMarkerInterval = null;
-    let isSnippetPlaying = false; 
-    let snippetDurationMs = 0;        
-    let snippetRemainingMs = 0;      
-    let gameStartTime = 0; // el punto de inicio de los 15s dentro del audio
-    let isFullSongPlaying = false; 
-    let fullPlayerInterval = null; 
-    
-    // nuevo: historial para evitar repetición entre juegos.
-    let lastTwoIndices = [-1, -1]; // almacena los índices de las dos últimas canciones jugadas de 'biblioteca'
-
-    // NUEVO: Sistema de rachas
-    let winStreak = parseInt(localStorage.getItem('winStreak')) || 0;
-    const streakEl = document.getElementById('streak');
-
-    // dom
-    const playButton = document.getElementById('play-button');
-    const skipButton = document.getElementById('skip-button-standalone'); 
-    const searchInput = document.getElementById('search-input');
-    const songsList = document.getElementById('songs-list');
-    const progressBarFill = document.getElementById('progress-bar-fill');
-    const segmentsOverlay = document.getElementById('segments-overlay');
-    const timerTextEl = document.getElementById('current-timer-text');
-    const volumeSlider = document.getElementById('volume-slider');
-    const gameOverMessage = document.getElementById('game-over-message');
-    const gameOverContent = document.getElementById('game-over-content'); // nuevo
-    const gameResult = document.getElementById('game-result');
-    const answerLabel = document.getElementById('answer-label'); // nuevo
-    const correctAnswerEl = document.getElementById('correct-answer'); // renombrado
-    
-    // nuevos elementos del reproductor completo
-    const fullSongIconPlay = document.getElementById('full-song-icon-play');
-    const fullSongIconPause = document.getElementById('full-song-icon-pause');
-    const fullSongSeeker = document.getElementById('full-song-seeker');
-    const fullSongTime = document.getElementById('full-song-time');
-
-    // iconos svg para el boton
-    const iconPlay = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
-    const iconPause = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-
-    // -----------------------------------------------------
-    // helpers
-    function formatSeconds(value) {
-        // CORREGIDO: Number.isInteger, toFixed
-        return Number.isInteger(value) ? `${value}s` : `${value.toFixed(1)}s`;
-    }
-
-    // nueva función: formatear tiempo a mm:ss
-    function formatTime(seconds) {
-        // CORREGIDO: isNaN, Math.floor
-        if (isNaN(seconds) || seconds < 0) return "0:00";
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-    }
-
-    // calcula el porcentaje en la barra basado en el tiempo total del juego (15s)
-    function getPercentage(timeinseconds) {
-        return (timeinseconds / totalGameDuration) * 100;
-    }
-    
-    // visual: renderiza las divisiones de la barra de progreso
-    function renderProgressSegments() {
-        if (!segmentsOverlay) return;
-        segmentsOverlay.innerHTML = "";
-        const total = totalGameDuration;
-        
-        let previousCumulativeTime = 0;
-        targetDurations.forEach((cumulativeTime, index) => {
-            const segmentTime = cumulativeTime - previousCumulativeTime;
             
-            const segment = document.createElement('div');
-            segment.classList.add('progress-segment');
-            segment.style.width = `${(segmentTime / total) * 100}%`; 
-            segmentsOverlay.appendChild(segment);
-            previousCumulativeTime = cumulativeTime;
 
-            if (index < targetDurations.length - 1) {
-                const percentage = getPercentage(cumulativeTime);
-                
-                const divider = document.createElement('div');
-                divider.classList.add('segment-divider'); 
-                divider.style.left = `${percentage}%`;
-                segmentsOverlay.appendChild(divider);
-            }
-        });
-    }
+            // { nombre: "", archivo: "music/", inicios: [0, 0.5, 1, 1.5, 2, 2.5] },
+        ];
 
-    // NUEVA FUNCIÓN MEJORADA PARA RACHA CON DEGRADADO PROGRESIVO
-    function updateStreakDisplay() {
-        streakEl.textContent = `Racha: ${winStreak}`;
 
-        let color = '';
+        // -----------------------------------------------------
+        // Variables
+        let audioPlayer = document.getElementById('audio-player');
+        let currentSong = {};
+        let guessCount = 0;
 
-        if (winStreak === 0) {
-            color = 'var(--muted)'; // gris
-        } 
-        else if (winStreak === 1) {
-            color = 'var(--streak-1)'; // verde
-        }
-        else if (winStreak <= 10) {
-            // Degradado suave de verde (#55b725) a rojo (#ff3300)
-            const progress = (winStreak - 1) / 9; // 0 a 1
-            color = lerpColor("#55b725", "#ff3300", progress);
-        }
-        else if (winStreak <= 20) {
-            // De rojo fuerte a rojo muy oscuro
-            const progress = (winStreak - 10) / 10;
-            color = lerpColor("#ff3300", "#990000", progress);
-        }
-        else if (winStreak <= 25) {
-            // Violeta suave a violeta medio
-            const progress = (winStreak - 20) / 5;
-            color = lerpColor("#b14aed", "#9c3be0", progress);
-        }
-        else {
-            // Más de 25: violeta intenso elegante con leve pulsito
-            color = 'var(--streak-max)';
-            // Efecto sutil de "brillo" en rachas legendarias
-            streakEl.style.textShadow = '0 0 12px rgba(138, 43, 226, 0.7)';
-        }
+        // Duraciones de intentos
+        const targetDurations = [0.1, 0.5, 2, 4, 8, 15];
+        const totalGameDuration = 15;
 
-        streakEl.style.color = color;
-        
-        // Quitar el brillo legendario cuando la racha es menor a 26
-        if (winStreak < 26) {
-            streakEl.style.textShadow = 'none';
-        }
-    }
+        let hasGuessedCorrectly = false;
+        let availableSongs = [];
 
-    // Función auxiliar para interpolar colores (degradado suave)
-    function lerpColor(color1, color2, factor) {
-        const hex = (c) => {
-            const hex = c.replace('#', '');
-            return [parseInt(hex.substr(0,2),16), parseInt(hex.substr(2,2),16), parseInt(hex.substr(4,2),16)];
-        };
-        const rgb1 = hex(color1);
-        const rgb2 = hex(color2);
-        const result = rgb1.map((c, i) => Math.round(c + factor * (rgb2[i] - c)));
-        return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
-    }
+        // variables de control de tiempo y snippet
+        let snippetTimeout = null;
+        let timeMarkerInterval = null;
+        let isSnippetPlaying = false;
+        let snippetDurationMs = 0;
+        let snippetRemainingMs = 0;
+        let gameStartTime = 0; // el punto de inicio de los 15s dentro del audio
+        let isFullSongPlaying = false;
+        let fullPlayerInterval = null;
 
-    // -----------------------------------------------------
-    // game / audio logic
-    function resetGame() {
-        pauseAudioInternal();
-        isFullSongPlaying = false; 
+        // nuevo: historial para evitar repetición entre juegos.
+        let lastTwoIndices = [-1, -1]; // almacena los índices de las dos últimas canciones jugadas de 'biblioteca'
 
-        // nuevo: limpiar el intervalo del reproductor completo
-        if (fullPlayerInterval) clearInterval(fullPlayerInterval);
-        fullPlayerInterval = null;
-        if (fullSongSeeker) fullSongSeeker.value = 0;
-        if (fullSongTime) fullSongTime.textContent = '0:00 / 0:00'; 
-        audioPlayer.onloadedmetadata = null; // limpiar listeners
-        audioPlayer.onended = null;
-        if (fullSongIconPlay) updateFullPlayerIcon(false);
+        // NUEVO: Sistema de rachas
+        let winStreak = parseInt(localStorage.getItem('winStreak')) || 0;
+        const streakEl = document.getElementById('streak');
 
-        isSnippetPlaying = false;
-        snippetRemainingMs = 0;
-        snippetDurationMs = 0;
+        // NUEVO: Sistema salva rachas
+        let streaksavers = parseInt(localStorage.getItem('streaksavers')) || 3;
+        const minstreak = 13;
 
-        // availableSongs se rellena dentro de selectRandomSong si está vacío
-        selectRandomSong();
-        
-        guessCount = 0;
-        hasGuessedCorrectly = false;
-        searchInput.value = "";
-        songsList.classList.remove('show');
-        gameOverMessage.classList.remove('show'); 
-        gameOverContent.classList.remove('win', 'lose'); // limpiar clases de color
-        document.getElementById('search-container').classList.remove('disabled');
-        
-        // corrección: desactivar botón al principio, se activará al cargar el audio
-        playButton.setAttribute('disabled', ''); 
-        skipButton.disabled = false;
-        
-        clearGuessBoxes();
-        
-        gameStartTime = currentSong.inicios ? currentSong.inicios[0] : 0; 
-        
-        updateTimeMarker(0); 
-        updatePlayIcon(false);
+        // dom
+        const playButton = document.getElementById('play-button');
+        const skipButton = document.getElementById('skip-button-standalone');
+        const searchInput = document.getElementById('search-input');
+        const songsList = document.getElementById('songs-list');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const segmentsOverlay = document.getElementById('segments-overlay');
+        const timerTextEl = document.getElementById('current-timer-text');
+        const volumeSlider = document.getElementById('volume-slider');
+        const gameOverMessage = document.getElementById('game-over-message');
+        const gameOverContent = document.getElementById('game-over-content'); // nuevo
+        const gameResult = document.getElementById('game-result');
+        const answerLabel = document.getElementById('answer-label'); // nuevo
+        const correctAnswerEl = document.getElementById('correct-answer'); // renombrado
 
-        audioPlayer.src = currentSong.archivo || "";
-        audioPlayer.currentTime = gameStartTime;
-        
-        audioPlayer.load(); // forzar la carga de la nueva fuente
+        // nuevos elementos del reproductor completo
+        const fullSongIconPlay = document.getElementById('full-song-icon-play');
+        const fullSongIconPause = document.getElementById('full-song-icon-pause');
+        const fullSongSeeker = document.getElementById('full-song-seeker');
+        const fullSongTime = document.getElementById('full-song-time');
 
-        // corrección: usar oncanplaythrough para activar el botón solo cuando el audio está listo
-        audioPlayer.oncanplaythrough = () => {
-             // re-establecer currentTime por si acaso
-            audioPlayer.currentTime = gameStartTime; 
-            playButton.removeAttribute('disabled');
-            audioPlayer.oncanplaythrough = null; // limpiar el listener
-        };
+        // iconos svg para el boton
+        const iconPlay = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+        const iconPause = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
 
-        // NUEVO: Actualizar display de racha al reset
-        updateStreakDisplay();
-    }
-
-    function selectRandomSong() {
-        // asegura que el pool de la sesión esté lleno si es necesario.
-        // si el pool está vacío, se rellena con toda la biblioteca (comportamiento original).
-        if (!availableSongs || availableSongs.length === 0) {
-            availableSongs = [...biblioteca];
+        // -----------------------------------------------------
+        // helpers
+        function formatSeconds(value) {
+            // CORREGIDO: Number.isInteger, toFixed
+            return Number.isInteger(value) ? `${value}s` : `${value.toFixed(1)}s`;
         }
 
-        let randomIndexInAvailable;
-        let candidateLibraryIndex = -1;
-        let selectedSongCandidate = null;
-        let isRecentlyPlayed = true;
-        let attempts = 0;
-        const availableCount = availableSongs.length;
-        const maxAttempts = availableCount > 2 ? availableCount * 2 : 10; // limite de seguridad
-        
-        // bucle para encontrar una canción que no esté en 'lastTwoIndices'.
-        while (isRecentlyPlayed && attempts < maxAttempts) {
-            // selecciona un índice aleatorio del pool de canciones disponibles para esta sesión.
-            // CORREGIDO: Math.floor, Math.random
-            randomIndexInAvailable = Math.floor(Math.random() * availableSongs.length);
-            selectedSongCandidate = availableSongs[randomIndexInAvailable];
-            
-            // encuentra el índice de la canción en la biblioteca principal para el chequeo histórico.
-            candidateLibraryIndex = biblioteca.findIndex(song => song.nombre === selectedSongCandidate.nombre);
-
-            // comprueba si la canción candidata es una de las dos últimas.
-            if (candidateLibraryIndex !== lastTwoIndices[0] && candidateLibraryIndex !== lastTwoIndices[1]) {
-                isRecentlyPlayed = false;
-            }
-            attempts++;
-
-            // pequeña optimización/seguridad: si la cantidad de canciones disponibles es muy baja (<= 2)
-            // y ya intentamos más veces que el número de canciones, salimos forzadamente para evitar 
-            // un loop y aceptar la repetición si es inevitable (solo quedan las 2 últimas).
-            if (availableCount <= 2 && attempts >= availableCount) {
-                 isRecentlyPlayed = false; 
-            }
+        // nueva función: formatear tiempo a mm:ss
+        function formatTime(seconds) {
+            // CORREGIDO: isNaN, Math.floor
+            if (isNaN(seconds) || seconds < 0) return "0:00";
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
         }
-        
-        // 3. actualizar la canción actual y el pool de la sesión.
-        currentSong = selectedSongCandidate;
-        availableSongs.splice(randomIndexInAvailable, 1);
-        
-        // 4. actualizar el historial global.
-        lastTwoIndices[1] = lastTwoIndices[0];
-        lastTwoIndices[0] = candidateLibraryIndex; 
-    } 
-    
-    function clearGuessBoxes() {
-        const boxes = document.querySelectorAll('.guess-box');
-        boxes.forEach(box => { 
-            box.textContent = ""; 
-            box.classList.remove('correct'); 
-            box.classList.remove('incorrect'); 
-            box.classList.remove('skipped'); // nuevo: limpiar la clase 'skipped'
-        });
-    }
 
-    function updatePlayIcon(playing) {
-        playButton.innerHTML = playing ? iconPause : iconPlay;
-        playButton.setAttribute('aria-label', playing ? 'pausar fragmento' : 'escuchar fragmento');
-    }
-
-    function pauseAudioInternal() {
-        audioPlayer.pause();
-        if (snippetTimeout) { clearTimeout(snippetTimeout); snippetTimeout = null; }
-        stopTimeMarkerUpdate();
-        isSnippetPlaying = false;
-        updatePlayIcon(false);
-    }
-
-    // nuevas funciones para reproductor completo
-    function updateFullPlayerIcon(playing) {
-        if (playing) {
-            fullSongIconPlay.style.display = 'none';
-            fullSongIconPause.style.display = 'inline-block';
-        } else {
-            fullSongIconPlay.style.display = 'inline-block';
-            fullSongIconPause.style.display = 'none';
+        // calcula el porcentaje en la barra basado en el tiempo total del juego (15s)
+        function getPercentage(timeinseconds) {
+            return (timeinseconds / totalGameDuration) * 100;
         }
-    }
 
-    // intervalo para actualizar el tiempo y la barra
-    function startFullPlayerUpdate() {
-        if (fullPlayerInterval) clearInterval(fullPlayerInterval);
+        // visual: renderiza las divisiones de la barra de progreso
+        function renderProgressSegments() {
+            if (!segmentsOverlay) return;
+            segmentsOverlay.innerHTML = "";
+            const total = totalGameDuration;
 
-        fullPlayerInterval = setInterval(() => {
-            const currentTime = audioPlayer.currentTime;
-            const duration = audioPlayer.duration;
-            
-            if (audioPlayer.paused || audioPlayer.ended) {
-                if(audioPlayer.ended) { 
-                    isFullSongPlaying = false;
-                    updateFullPlayerIcon(false);
-                    audioPlayer.currentTime = 0;
-                    if (fullSongSeeker) fullSongSeeker.value = 0;
+            let previousCumulativeTime = 0;
+            targetDurations.forEach((cumulativeTime, index) => {
+                const segmentTime = cumulativeTime - previousCumulativeTime;
+
+                const segment = document.createElement('div');
+                segment.classList.add('progress-segment');
+                segment.style.width = `${(segmentTime / total) * 100}%`;
+                segmentsOverlay.appendChild(segment);
+                previousCumulativeTime = cumulativeTime;
+
+                if (index < targetDurations.length - 1) {
+                    const percentage = getPercentage(cumulativeTime);
+
+                    const divider = document.createElement('div');
+                    divider.classList.add('segment-divider');
+                    divider.style.left = `${percentage}%`;
+                    segmentsOverlay.appendChild(divider);
                 }
-                clearInterval(fullPlayerInterval);
-                fullPlayerInterval = null;
+            });
+        }
+
+        // NUEVA FUNCIÓN MEJORADA PARA RACHA CON DEGRADADO PROGRESIVO
+        function updateStreakDisplay() {
+            streakEl.textContent = `Racha: ${winStreak}`;
+
+            let color = '';
+
+            if (winStreak === 0) {
+                color = 'var(--muted)'; // gris
+            }
+            else if (winStreak === 1) {
+                color = 'var(--streak-1)'; // verde
+            }
+            else if (winStreak <= 10) {
+                // Degradado suave de verde (#55b725) a rojo (#ff3300)
+                const progress = (winStreak - 1) / 9; // 0 a 1
+                color = lerpColor("#55b725", "#ff3300", progress);
+            }
+            else if (winStreak <= 20) {
+                // De rojo fuerte a rojo muy oscuro
+                const progress = (winStreak - 10) / 10;
+                color = lerpColor("#ff3300", "#990000", progress);
+            }
+            else if (winStreak <= 25) {
+                // Violeta suave a violeta medio
+                const progress = (winStreak - 20) / 5;
+                color = lerpColor("#b14aed", "#9c3be0", progress);
+            }
+            else {
+                // Más de 25: violeta intenso elegante con leve pulsito
+                color = 'var(--streak-max)';
+                // Efecto sutil de "brillo" en rachas legendarias
+                streakEl.style.textShadow = '0 0 12px rgba(138, 43, 226, 0.7)';
+            }
+
+            streakEl.style.color = color;
+
+            // Quitar el brillo legendario cuando la racha es menor a 26
+            if (winStreak < 26) {
+                streakEl.style.textShadow = 'none';
+            }
+        }
+
+        // Función auxiliar para interpolar colores (degradado suave)
+        function lerpColor(color1, color2, factor) {
+            const hex = (c) => {
+                const hex = c.replace('#', '');
+                return [parseInt(hex.substr(0, 2), 16), parseInt(hex.substr(2, 2), 16), parseInt(hex.substr(4, 2), 16)];
+            };
+            const rgb1 = hex(color1);
+            const rgb2 = hex(color2);
+            const result = rgb1.map((c, i) => Math.round(c + factor * (rgb2[i] - c)));
+            return `rgb(${result[0]}, ${result[1]}, ${result[2]})`;
+        }
+
+        // NUEVA: Función para actualizar UI de salva rachas (con PNGs)
+        function updateStreakSaverUI() {
+            const streakSaverEl = document.getElementById('streak-saver-ui');
+            if (!streakSaverEl) return;
+
+            if (winStreak < minstreak) {
+                streakSaverEl.style.display = 'none';
                 return;
             }
-            
-            if (isFinite(duration) && duration > 0 && fullSongSeeker && fullSongTime) {
-                const percentage = (currentTime / duration) * 100;
-                fullSongSeeker.value = percentage;
-                fullSongTime.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
-            } 
-        }, 500); // actualizar dos veces por segundo
-    }
-    
-    // listener para el slider de búsqueda (seeker)
-    function setupFullSongSeeker() {
-        if (!fullSongSeeker || fullSongSeeker.dataset.listenerSet) return;
-        
-        // al mover el slider (input), solo actualiza el tiempo en pantalla
-        fullSongSeeker.addEventListener('input', function() {
-            const duration = audioPlayer.duration || 0;
-            const seekTo = duration * (this.value / 100);
-            fullSongTime.textContent = `${formatTime(seekTo)} / ${formatTime(duration)}`;
-        });
-        
-        // al soltar el slider (change), busca la posición y reproduce si estaba pausado
-        fullSongSeeker.addEventListener('change', function() {
-            const duration = audioPlayer.duration || 0;
-            const seekTo = duration * (this.value / 100);
-            
-            if (audioPlayer.readyState >= 2) { 
-                audioPlayer.currentTime = seekTo;
-                // si no estaba reproduciendo, iniciar la reproducción y el tracking
-                if (!isFullSongPlaying && audioPlayer.paused) {
-                    audioPlayer.play().catch(e => console.warn('fallo al reproducir después de buscar:', e));
-                    isFullSongPlaying = true;
-                    updateFullPlayerIcon(true);
-                    startFullPlayerUpdate();
+
+            streakSaverEl.style.display = 'block';
+            let html = 'Vidas: ';
+            const maxSavers = 3;
+            for (let i = 0; i < maxSavers; i++) {
+                const src = (i < streaksavers) ? 'img/racha_color.png' : 'img/racha_nocolor.png';
+                html += `<img src="${src}" alt="salva racha">`;
+            }
+            streakSaverEl.innerHTML = html;
+        }
+
+        // -----------------------------------------------------
+        // game / audio logic
+        function resetGame(forceNew = false) {
+            pauseAudioInternal();
+            isFullSongPlaying = false;
+
+            // nuevo: limpiar el intervalo del reproductor completo
+            if (fullPlayerInterval) clearInterval(fullPlayerInterval);
+            fullPlayerInterval = null;
+            if (fullSongSeeker) fullSongSeeker.value = 0;
+            if (fullSongTime) fullSongTime.textContent = '0:00 / 0:00';
+            audioPlayer.onloadedmetadata = null; // limpiar listeners
+            audioPlayer.onended = null;
+            if (fullSongIconPlay) updateFullPlayerIcon(false);
+
+            isSnippetPlaying = false;
+            snippetRemainingMs = 0;
+            snippetDurationMs = 0;
+
+            // Si se fuerza un juego nuevo (botón reset/play again), borramos la canción guardada
+            if (forceNew) {
+                localStorage.removeItem('savedSong');
+            }
+
+            // availableSongs se rellena dentro de selectRandomSong si está vacío
+            selectRandomSong();
+
+            guessCount = 0;
+            hasGuessedCorrectly = false;
+            searchInput.value = "";
+            songsList.classList.remove('show');
+            gameOverMessage.classList.remove('show');
+
+            // DELAYED: Clean up colors (so they don't flash during fade out)
+            setTimeout(() => {
+                gameOverContent.classList.remove('win', 'lose');
+            }, 300);
+
+            document.getElementById('search-container').classList.remove('disabled');
+
+            // corrección: desactivar botón al principio, se activará al cargar el audio
+            playButton.setAttribute('disabled', '');
+            skipButton.disabled = false;
+
+            clearGuessBoxes();
+
+            gameStartTime = currentSong.inicios ? currentSong.inicios[0] : 0;
+
+            updateTimeMarker(0);
+            updatePlayIcon(false);
+
+            audioPlayer.src = currentSong.archivo || "";
+            audioPlayer.currentTime = gameStartTime;
+
+            audioPlayer.load(); // forzar la carga de la nueva fuente
+
+            // corrección: usar oncanplaythrough para activar el botón solo cuando el audio está listo
+            audioPlayer.oncanplaythrough = () => {
+                // re-establecer currentTime por si acaso
+                audioPlayer.currentTime = gameStartTime;
+                playButton.removeAttribute('disabled');
+                audioPlayer.oncanplaythrough = null; // limpiar el listener
+            };
+
+            // NUEVO: Actualizar display de racha al reset
+            updateStreakDisplay();
+            updateStreakSaverUI();
+        }
+
+        function selectRandomSong() {
+            // 0. Revisar si hay una canción guardada en localStorage (persistencia)
+            const savedSongJSON = localStorage.getItem('savedSong');
+            if (savedSongJSON) {
+                try {
+                    currentSong = JSON.parse(savedSongJSON);
+                    // Aseguramos que availableSongs esté inicializado aunque usemos la guardada
+                    if (!availableSongs || availableSongs.length === 0) {
+                        availableSongs = [...biblioteca];
+                    }
+                    return; // Usamos la canción guardada y salimos
+                } catch (e) {
+                    console.error("Error parsing saved song", e);
+                    localStorage.removeItem('savedSong');
                 }
             }
-        });
-        
-        fullSongSeeker.dataset.listenerSet = true;
-    }
 
-    // inicialización del reproductor completo cuando el modal se abre
-    function initializeFullPlayer() {
-        // detener reproductor de snippet si aún estaba activo
-        pauseAudioInternal();
-        
-        // resetear el estado del reproductor completo
-        isFullSongPlaying = false;
-        updateFullPlayerIcon(false);
-        if (fullPlayerInterval) clearInterval(fullPlayerInterval);
-        fullPlayerInterval = null;
-        
-        // cargar el archivo completo (desde el inicio, no desde gameStartTime)
-        audioPlayer.src = currentSong.archivo; 
-        audioPlayer.currentTime = 0; 
-        audioPlayer.load(); // forzar la carga de metadatos (duración)
-        
-        // configurar el seeker
-        setupFullSongSeeker();
-        if (fullSongSeeker) fullSongSeeker.value = 0;
-
-        // esperar a que se carguen los metadatos para obtener la duración
-        audioPlayer.onloadedmetadata = () => {
-            const duration = audioPlayer.duration;
-            if (fullSongTime) fullSongTime.textContent = `0:00 / ${formatTime(duration)}`;
-            audioPlayer.onloadedmetadata = null; // limpiar para evitar múltiples llamadas
-        };
-        
-        // configurar el evento de finalización
-        audioPlayer.onended = () => {
-            isFullSongPlaying = false;
-            updateFullPlayerIcon(false);
-            audioPlayer.currentTime = 0;
-            if (fullSongSeeker) fullSongSeeker.value = 0;
-            if (fullSongTime) fullSongTime.textContent = `0:00 / ${formatTime(audioPlayer.duration)}`;
-            if (fullPlayerInterval) clearInterval(fullPlayerInterval);
-            fullPlayerInterval = null;
-        };
-    }
-
-    function toggleFullSong() {
-        if (!currentSong.archivo) return;
-        
-        if (isFullSongPlaying) {
-            audioPlayer.pause();
-            isFullSongPlaying = false;
-            updateFullPlayerIcon(false);
-            if (fullPlayerInterval) clearInterval(fullPlayerInterval);
-            fullPlayerInterval = null;
-        } else {
-            pauseAudioInternal(); // detener el snippet si estaba sonando
-            
-            // si está pausada y no en el inicio, reanudar
-            if (audioPlayer.paused && audioPlayer.currentTime > 0) {
-                 audioPlayer.play().catch(e => console.warn('fallo al reanudar canción completa:', e));
-            } else {
-                 // si está en el inicio (0:00) o terminó, empezar desde el principio (ya cargado por initializeFullPlayer)
-                 audioPlayer.currentTime = 0;
-                 audioPlayer.play().catch(e => console.warn('fallo al reproducir canción completa:', e));
+            // asegura que el pool de la sesión esté lleno si es necesario.
+            // si el pool está vacío, se rellena con toda la biblioteca (comportamiento original).
+            if (!availableSongs || availableSongs.length === 0) {
+                availableSongs = [...biblioteca];
             }
-            
-            isFullSongPlaying = true;
-            updateFullPlayerIcon(true);
-            startFullPlayerUpdate(); 
+
+            let randomIndexInAvailable;
+            let candidateLibraryIndex = -1;
+            let selectedSongCandidate = null;
+            let isRecentlyPlayed = true;
+            let attempts = 0;
+            const availableCount = availableSongs.length;
+            const maxAttempts = availableCount > 2 ? availableCount * 2 : 10; // limite de seguridad
+
+            // bucle para encontrar una canción que no esté en 'lastTwoIndices'.
+            while (isRecentlyPlayed && attempts < maxAttempts) {
+                // selecciona un índice aleatorio del pool de canciones disponibles para esta sesión.
+                // CORREGIDO: Math.floor, Math.random
+                randomIndexInAvailable = Math.floor(Math.random() * availableSongs.length);
+                selectedSongCandidate = availableSongs[randomIndexInAvailable];
+
+                // encuentra el índice de la canción en la biblioteca principal para el chequeo histórico.
+                candidateLibraryIndex = biblioteca.findIndex(song => song.nombre === selectedSongCandidate.nombre);
+
+                // comprueba si la canción candidata es una de las dos últimas.
+                if (candidateLibraryIndex !== lastTwoIndices[0] && candidateLibraryIndex !== lastTwoIndices[1]) {
+                    isRecentlyPlayed = false;
+                }
+                attempts++;
+
+                // pequeña optimización/seguridad: si la cantidad de canciones disponibles es muy baja (<= 2)
+                // y ya intentamos más veces que el número de canciones, salimos forzadamente para evitar 
+                // un loop y aceptar la repetición si es inevitable (solo quedan las 2 últimas).
+                if (availableCount <= 2 && attempts >= availableCount) {
+                    isRecentlyPlayed = false;
+                }
+            }
+
+            // 3. actualizar la canción actual y el pool de la sesión.
+            currentSong = selectedSongCandidate;
+            // Guardar la nueva canción en localStorage
+            localStorage.setItem('savedSong', JSON.stringify(currentSong));
+            availableSongs.splice(randomIndexInAvailable, 1);
+
+            // 4. actualizar el historial global.
+            lastTwoIndices[1] = lastTwoIndices[0];
+            lastTwoIndices[0] = candidateLibraryIndex;
         }
-    }
 
-
-    function finishSnippet() {
-        pauseAudioInternal();
-        snippetRemainingMs = 0; 
-        audioPlayer.currentTime = gameStartTime; 
-    }
-
-    // lógica de reproducción (con la mentirita de 0.2s)
-    function playSnippet() {
-        if (hasGuessedCorrectly || playButton.hasAttribute('disabled')) return;
-        
-        let totalDurationForGuess = targetDurations[guessCount] || totalGameDuration;
-        
-        // mentirita del 0.2s: si es el primer intento (guesscount=0) y el target visual es 0.1s, 
-        // la duracion real de la reproduccion (totaldurationforguess) sera 0.2s.
-        if (guessCount === 0 && totalDurationForGuess === 0.1) {
-             totalDurationForGuess = 0.2; 
+        function clearGuessBoxes() {
+            const boxes = document.querySelectorAll('.guess-box');
+            boxes.forEach(box => {
+                box.textContent = "";
+                box.classList.remove('correct');
+                box.classList.remove('incorrect');
+                box.classList.remove('skipped'); // nuevo: limpiar la clase 'skipped'
+            });
         }
-        
-        if (isSnippetPlaying) {
-            const playedTimeFromStart = audioPlayer.currentTime - gameStartTime;
-            // CORREGIDO: Math.max
-            snippetRemainingMs = Math.max(0, (totalDurationForGuess - playedTimeFromStart) * 1000);
+
+        function updatePlayIcon(playing) {
+            playButton.innerHTML = playing ? iconPause : iconPlay;
+            playButton.setAttribute('aria-label', playing ? 'pausar fragmento' : 'escuchar fragmento');
+        }
+
+        function pauseAudioInternal() {
+            audioPlayer.pause();
+            if (snippetTimeout) { clearTimeout(snippetTimeout); snippetTimeout = null; }
+            stopTimeMarkerUpdate();
+            isSnippetPlaying = false;
+            updatePlayIcon(false);
+        }
+
+        // nuevas funciones para reproductor completo
+        function updateFullPlayerIcon(playing) {
+            if (playing) {
+                fullSongIconPlay.style.display = 'none';
+                fullSongIconPause.style.display = 'inline-block';
+            } else {
+                fullSongIconPlay.style.display = 'inline-block';
+                fullSongIconPause.style.display = 'none';
+            }
+        }
+
+        // intervalo para actualizar el tiempo y la barra
+        function startFullPlayerUpdate() {
+            if (fullPlayerInterval) clearInterval(fullPlayerInterval);
+
+            fullPlayerInterval = setInterval(() => {
+                const currentTime = audioPlayer.currentTime;
+                const duration = audioPlayer.duration;
+
+                if (audioPlayer.paused || audioPlayer.ended) {
+                    if (audioPlayer.ended) {
+                        isFullSongPlaying = false;
+                        updateFullPlayerIcon(false);
+                        audioPlayer.currentTime = 0;
+                        if (fullSongSeeker) fullSongSeeker.value = 0;
+                    }
+                    clearInterval(fullPlayerInterval);
+                    fullPlayerInterval = null;
+                    return;
+                }
+
+                if (isFinite(duration) && duration > 0 && fullSongSeeker && fullSongTime) {
+                    const percentage = (currentTime / duration) * 100;
+                    fullSongSeeker.value = percentage;
+                    fullSongTime.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+                }
+            }, 500); // actualizar dos veces por segundo
+        }
+
+        // listener para el slider de búsqueda (seeker)
+        function setupFullSongSeeker() {
+            if (!fullSongSeeker || fullSongSeeker.dataset.listenerSet) return;
+
+            // al mover el slider (input), solo actualiza el tiempo en pantalla
+            fullSongSeeker.addEventListener('input', function () {
+                const duration = audioPlayer.duration || 0;
+                const seekTo = duration * (this.value / 100);
+                fullSongTime.textContent = `${formatTime(seekTo)} / ${formatTime(duration)}`;
+            });
+
+            // al soltar el slider (change), busca la posición y reproduce si estaba pausado
+            fullSongSeeker.addEventListener('change', function () {
+                const duration = audioPlayer.duration || 0;
+                const seekTo = duration * (this.value / 100);
+
+                if (audioPlayer.readyState >= 2) {
+                    audioPlayer.currentTime = seekTo;
+                    // si no estaba reproduciendo, iniciar la reproducción y el tracking
+                    if (!isFullSongPlaying && audioPlayer.paused) {
+                        audioPlayer.play().catch(e => console.warn('fallo al reproducir después de buscar:', e));
+                        isFullSongPlaying = true;
+                        updateFullPlayerIcon(true);
+                        startFullPlayerUpdate();
+                    }
+                }
+            });
+
+            fullSongSeeker.dataset.listenerSet = true;
+        }
+
+        // inicialización del reproductor completo cuando el modal se abre
+        function initializeFullPlayer() {
+            // detener reproductor de snippet si aún estaba activo
             pauseAudioInternal();
-            return;
+
+            // resetear el estado del reproductor completo
+            isFullSongPlaying = false;
+            updateFullPlayerIcon(false);
+            if (fullPlayerInterval) clearInterval(fullPlayerInterval);
+            fullPlayerInterval = null;
+
+            // cargar el archivo completo (desde el inicio, no desde gameStartTime)
+            audioPlayer.src = currentSong.archivo;
+            audioPlayer.currentTime = 0;
+            audioPlayer.load(); // forzar la carga de metadatos (duración)
+
+            // configurar el seeker
+            setupFullSongSeeker();
+            if (fullSongSeeker) fullSongSeeker.value = 0;
+
+            // esperar a que se carguen los metadatos para obtener la duración
+            audioPlayer.onloadedmetadata = () => {
+                const duration = audioPlayer.duration;
+                if (fullSongTime) fullSongTime.textContent = `0:00 / ${formatTime(duration)}`;
+                audioPlayer.onloadedmetadata = null; // limpiar para evitar múltiples llamadas
+            };
+
+            // configurar el evento de finalización
+            audioPlayer.onended = () => {
+                isFullSongPlaying = false;
+                updateFullPlayerIcon(false);
+                audioPlayer.currentTime = 0;
+                if (fullSongSeeker) fullSongSeeker.value = 0;
+                if (fullSongTime) fullSongTime.textContent = `0:00 / ${formatTime(audioPlayer.duration)}`;
+                if (fullPlayerInterval) clearInterval(fullPlayerInterval);
+                fullPlayerInterval = null;
+            };
         }
 
-        if (snippetRemainingMs > 0) {
-            audioPlayer.play().catch(e => console.warn('fallo al reanudar:', e));
+        function toggleFullSong() {
+            if (!currentSong.archivo) return;
+
+            if (isFullSongPlaying) {
+                audioPlayer.pause();
+                isFullSongPlaying = false;
+                updateFullPlayerIcon(false);
+                if (fullPlayerInterval) clearInterval(fullPlayerInterval);
+                fullPlayerInterval = null;
+            } else {
+                pauseAudioInternal(); // detener el snippet si estaba sonando
+
+                // si está pausada y no en el inicio, reanudar
+                if (audioPlayer.paused && audioPlayer.currentTime > 0) {
+                    audioPlayer.play().catch(e => console.warn('fallo al reanudar canción completa:', e));
+                } else {
+                    // si está en el inicio (0:00) o terminó, empezar desde el principio (ya cargado por initializeFullPlayer)
+                    audioPlayer.currentTime = 0;
+                    audioPlayer.play().catch(e => console.warn('fallo al reproducir canción completa:', e));
+                }
+
+                isFullSongPlaying = true;
+                updateFullPlayerIcon(true);
+                startFullPlayerUpdate();
+            }
+        }
+
+
+        function finishSnippet() {
+            pauseAudioInternal();
+            snippetRemainingMs = 0;
+            audioPlayer.currentTime = gameStartTime;
+        }
+
+        // lógica de reproducción (con la mentirita de 0.2s)
+        function playSnippet() {
+            if (hasGuessedCorrectly || playButton.hasAttribute('disabled')) return;
+
+            let totalDurationForGuess = targetDurations[guessCount] || totalGameDuration;
+
+            // mentirita del 0.2s: si es el primer intento (guesscount=0) y el target visual es 0.1s, 
+            // la duracion real de la reproduccion (totaldurationforguess) sera 0.2s.
+            if (guessCount === 0 && totalDurationForGuess === 0.1) {
+                totalDurationForGuess = 0.2;
+            }
+
+            if (isSnippetPlaying) {
+                const playedTimeFromStart = audioPlayer.currentTime - gameStartTime;
+                // CORREGIDO: Math.max
+                snippetRemainingMs = Math.max(0, (totalDurationForGuess - playedTimeFromStart) * 1000);
+                pauseAudioInternal();
+                return;
+            }
+
+            if (snippetRemainingMs > 0) {
+                audioPlayer.play().catch(e => console.warn('fallo al reanudar:', e));
+                isSnippetPlaying = true;
+                updatePlayIcon(true);
+
+                const remainingSeconds = snippetRemainingMs / 1000;
+                startTimeMarkerUpdate(audioPlayer.currentTime, remainingSeconds, totalDurationForGuess);
+
+                snippetTimeout = setTimeout(() => {
+                    finishSnippet();
+                }, snippetRemainingMs);
+                return;
+            }
+
+            pauseAudioInternal();
+            audioPlayer.currentTime = gameStartTime;
+
+            snippetDurationMs = Math.round(totalDurationForGuess * 1000);
+            snippetRemainingMs = snippetDurationMs;
+
+            audioPlayer.play().catch(e => console.warn('fallo al reproducir:', e));
+
             isSnippetPlaying = true;
             updatePlayIcon(true);
-            
-            const remainingSeconds = snippetRemainingMs / 1000;
-            startTimeMarkerUpdate(audioPlayer.currentTime, remainingSeconds, totalDurationForGuess); 
-            
+
+            startTimeMarkerUpdate(gameStartTime, totalDurationForGuess, totalDurationForGuess);
+
             snippetTimeout = setTimeout(() => {
                 finishSnippet();
-            }, snippetRemainingMs);
-            return;
+            }, snippetDurationMs);
         }
 
-        pauseAudioInternal(); 
-        audioPlayer.currentTime = gameStartTime; 
-        
-        snippetDurationMs = Math.round(totalDurationForGuess * 1000); 
-        snippetRemainingMs = snippetDurationMs;
+        let isGameOver = false;
 
-        audioPlayer.play().catch(e => console.warn('fallo al reproducir:', e));
-        
-        isSnippetPlaying = true;
-        updatePlayIcon(true);
-
-        startTimeMarkerUpdate(gameStartTime, totalDurationForGuess, totalDurationForGuess);
-
-        snippetTimeout = setTimeout(() => {
+        // función de game over modificada
+        function showGameOver(won) {
             finishSnippet();
-        }, snippetDurationMs);
-    }
-    
-    // función de game over modificada
-    function showGameOver(won) {
-        finishSnippet();
-        
-        // inicializar el reproductor completo antes de mostrar el modal
-        initializeFullPlayer(); 
 
-        if (won) {
-            gameResult.textContent = "ganaste gg"; // TEXTO SOLICITADO
-            gameOverContent.classList.remove('win', 'lose'); // ¡limpia ambas!
-            gameOverContent.classList.add('win');
-            answerLabel.textContent = "la cancion era"; // etiqueta simple
+            // inicializar el reproductor completo antes de mostrar el modal
+            initializeFullPlayer();
 
-            // NUEVO: Incrementar racha al ganar
-            winStreak++;
-            localStorage.setItem('winStreak', winStreak);
-            updateStreakDisplay();
-        } else {
-            gameResult.textContent = "perdiste crack"; // "game over" o similar
-            gameOverContent.classList.remove('win', 'lose'); // ¡limpia ambas!
-            gameOverContent.classList.add('lose');
-            answerLabel.textContent = "la cancion era"; // etiqueta simple
+            if (won) {
+                gameResult.textContent = "ganaste gg"; // TEXTO SOLICITADO
+                gameOverContent.classList.remove('win', 'lose'); // ¡limpia ambas!
+                gameOverContent.classList.add('win');
+                answerLabel.textContent = "la cancion era"; // etiqueta simple
 
-            // NUEVO: Resetear racha al perder
-            winStreak = 0;
-            localStorage.setItem('winStreak', winStreak);
-            updateStreakDisplay();
-        }
-        
-        correctAnswerEl.textContent = (currentSong.nombre || "");
-        gameOverMessage.classList.add('show');
-        
-        document.getElementById('search-container').classList.add('disabled');
-        playButton.setAttribute('disabled', '');
-        skipButton.disabled = true;
-    }
+                // NUEVO: Incrementar racha al ganar
+                winStreak++;
+                localStorage.setItem('winStreak', winStreak);
 
-    // NUEVA FUNCION: handleGuess con la cancion real (llamada por click en la lista)
-    function handleGuessFromSelection(selectedSongName) {
-        if (hasGuessedCorrectly || guessCount >= targetDurations.length) return;
-        
-        const correctAnswer = (currentSong.nombre || "").trim(); 
-        const guessBox = document.querySelectorAll('.guess-box')[guessCount];
-        songsList.classList.remove('show');
-        
-        guessBox.classList.remove('incorrect', 'skipped'); 
-        
-        const isCorrect = selectedSongName.toLowerCase() === correctAnswer.toLowerCase();
+                // NUEVO: Recompensas de Streak Save (10, 20, 37)
+                if (winStreak === 10 || winStreak === 20 || winStreak === 37) {
+                    streaksavers++;
+                    localStorage.setItem('streaksavers', streaksavers);
+                }
 
-        if (isCorrect) { 
-            guessBox.textContent = currentSong.nombre; 
-            guessBox.classList.add('correct');
-            hasGuessedCorrectly = true;
-            
-            // CAMBIO: Deshabilitar inmediatamente y añadir el retraso de 1.5s
+                updateStreakDisplay();
+                updateStreakSaverUI();
+            } else {
+                gameResult.textContent = "perdiste crack"; // "game over" o similar
+                gameOverContent.classList.remove('win', 'lose'); // ¡limpia ambas!
+                gameOverContent.classList.add('lose');
+                answerLabel.textContent = "la cancion era"; // etiqueta simple
+
+                // NUEVO: Lógica de salva rachas al perder
+                if (winStreak >= minstreak && streaksavers > 0) {
+                    streaksavers--;
+                    localStorage.setItem('streaksavers', streaksavers);
+
+                    // Si llegamos a 0 vidas, se resetea la racha (el último saver no salva, solo avisa)
+                    if (streaksavers === 0) {
+                        winStreak = 0;
+                        localStorage.setItem('winStreak', winStreak);
+                    }
+                } else {
+                    winStreak = 0;
+                    localStorage.setItem('winStreak', winStreak);
+                }
+                updateStreakDisplay();
+                updateStreakSaverUI();
+            }
+
+            correctAnswerEl.textContent = (currentSong.nombre || "");
+            gameOverMessage.classList.add('show');
+
             document.getElementById('search-container').classList.add('disabled');
             playButton.setAttribute('disabled', '');
             skipButton.disabled = true;
+        }
 
-            setTimeout(() => {
-                showGameOver(true);
-            }, 1500); // Retraso de 1.5 segundos
-            
-        } else {
-            // si falla, se pone el nombre seleccionado en la casilla
-            guessBox.textContent = selectedSongName || "intento fallido";
-            guessBox.classList.add('incorrect'); // usa el rojo
+        // NUEVA FUNCION: handleGuess con la cancion real (llamada por click en la lista)
+        function handleGuessFromSelection(selectedSongName) {
+            if (hasGuessedCorrectly || guessCount >= targetDurations.length) return;
+
+            const correctAnswer = (currentSong.nombre || "").trim();
+            const guessBox = document.querySelectorAll('.guess-box')[guessCount];
+            songsList.classList.remove('show');
+
+            guessBox.classList.remove('incorrect', 'skipped');
+
+            const isCorrect = selectedSongName.toLowerCase() === correctAnswer.toLowerCase();
+
+            if (isCorrect) {
+                guessBox.textContent = currentSong.nombre;
+                guessBox.classList.add('correct');
+                hasGuessedCorrectly = true;
+
+                // CAMBIO: Deshabilitar inmediatamente y añadir el retraso de 1.5s
+                document.getElementById('search-container').classList.add('disabled');
+                playButton.setAttribute('disabled', '');
+                skipButton.disabled = true;
+
+                setTimeout(() => {
+                    showGameOver(true);
+                }, 1500); // Retraso de 1.5 segundos
+
+            } else {
+                // si falla, se pone el nombre seleccionado en la casilla
+                guessBox.textContent = selectedSongName || "intento fallido";
+                guessBox.classList.add('incorrect'); // usa el rojo
+                guessCount++;
+                if (guessCount < targetDurations.length) {
+                    updateTimeMarker(guessCount);
+                    finishSnippet();
+                } else {
+                    showGameOver(false);
+                }
+            }
+            document.getElementById('search-input').value = "";
+        }
+
+
+        function handleSkip() {
+            if (hasGuessedCorrectly || guessCount >= targetDurations.length) return;
+            const guessBox = document.querySelectorAll('.guess-box')[guessCount];
+
+            // >>> INICIO MODIFICACIÓN JS PARA SKIP <<<
+            guessBox.textContent = "Skipped";
+            guessBox.classList.remove('incorrect', 'correct'); // asegurar que no tiene rojo ni verde
+            guessBox.classList.add('skipped'); // nuevo: usa el gris oscuro
+            // >>> FIN MODIFICACIÓN JS PARA SKIP <<<
+
             guessCount++;
             if (guessCount < targetDurations.length) {
                 updateTimeMarker(guessCount);
-                finishSnippet(); 
+                finishSnippet();
             } else {
                 showGameOver(false);
             }
-        }
-        document.getElementById('search-input').value = "";
-    }
-
-
-    function handleSkip() {
-        if (hasGuessedCorrectly || guessCount >= targetDurations.length) return;
-        const guessBox = document.querySelectorAll('.guess-box')[guessCount];
-        
-        // >>> INICIO MODIFICACIÓN JS PARA SKIP <<<
-        guessBox.textContent = "Skipped";
-        guessBox.classList.remove('incorrect', 'correct'); // asegurar que no tiene rojo ni verde
-        guessBox.classList.add('skipped'); // nuevo: usa el gris oscuro
-        // >>> FIN MODIFICACIÓN JS PARA SKIP <<<
-        
-        guessCount++;
-        if (guessCount < targetDurations.length) {
-            updateTimeMarker(guessCount);
-            finishSnippet(); 
-        } else {
-            showGameOver(false);
-        }
-        document.getElementById('search-input').value = "";
-        songsList.classList.remove('show');
-    }
-
-    // volumen
-    if (volumeSlider) {
-        // CORREGIDO: parseFloat
-        audioPlayer.volume = parseFloat(volumeSlider.value);
-        volumeSlider.addEventListener("input", e => {
-            // CORREGIDO: parseFloat
-            audioPlayer.volume = parseFloat(e.target.value);
-        });
-    }
-
-    // fix visual: sincroniza marcador visual estatico (la flecha)
-    function updateTimeMarker(index) {
-        // CORREGIDO: Math.min
-        const safeIndex = Math.min(index, targetDurations.length - 1); 
-        const targetTime = targetDurations[safeIndex]; 
-        const percentage = getPercentage(targetTime);
-        
-        timerTextEl.style.left = percentage + '%';
-        timerTextEl.textContent = formatSeconds(targetTime);
-        
-        const prevDuration = safeIndex > 0 ? targetDurations[safeIndex - 1] : 0;
-        
-        const startPercentage = getPercentage(prevDuration);
-        progressBarFill.style.width = startPercentage + '%';
-    }
-
-    // fix visual: logica de la barra de progreso mientras suena
-    function startTimeMarkerUpdate(currentAudioTimeSeconds, segmentDurationSeconds, totalDurationForGuess) {
-        stopTimeMarkerUpdate();
-        
-        const fullSnippetDuration = totalDurationForGuess * 1000; 
-        const segEndPercentage = getPercentage(totalDurationForGuess);
-        
-        const updateInterval = 30; 
-        
-        timeMarkerInterval = setInterval(() => {
-            
-            // CORREGIDO: Math.max
-            const elapsedFromGameStart = Math.max(0, (audioPlayer.currentTime - gameStartTime) * 1000);
-
-            if (elapsedFromGameStart >= (fullSnippetDuration + 50)) { 
-                stopTimeMarkerUpdate();
-                return;
-            }
-            updateBarVisuals(elapsedFromGameStart);
-
-        }, updateInterval);
-
-        function updateBarVisuals(ms) {
-            const currentSeconds = ms / 1000;
-            const currentPct = getPercentage(currentSeconds);
-            
-            // CORREGIDO: Math.min
-            progressBarFill.style.width = Math.min(currentPct, segEndPercentage) + '%';
-        }
-    }
-
-    function stopTimeMarkerUpdate() {
-        if (timeMarkerInterval) { clearInterval(timeMarkerInterval); timeMarkerInterval = null; }
-    }
-
-    // -----------------------------------------------------
-    // buscador y eventos
-    searchInput.addEventListener('input', function() {
-        // no eliminar funcion de tolowercase aqui, es necesaria para la busqueda
-        const query = (this.value || '').toLowerCase(); 
-        songsList.innerHTML = '';
-        if (query.length < 2) { songsList.classList.remove('show'); return; }
-        const filtered = biblioteca.filter(s => s.nombre.toLowerCase().includes(query));
-        if (filtered.length > 0) {
-            // CORREGIDO: forEach, appendChild, slice
-            filtered.slice(0,10).forEach(song => {
-                const div = document.createElement('div');
-                div.classList.add('suggestion-item');
-                div.textContent = song.nombre;
-                
-                // EVENTO IMPORTANTE: AHORA LLAMA A LA NUEVA FUNCIÓN DE ADIVINANZA
-                div.addEventListener('click', () => {
-                    // primero se rellena el input con el valor seleccionado
-                    searchInput.value = song.nombre; 
-                    songsList.classList.remove('show');
-                    // luego se dispara la adivinanza SÓLO con la canción seleccionada
-                    handleGuessFromSelection(song.nombre);
-                });
-                songsList.appendChild(div);
-            });
-            songsList.classList.add('show');
-        } else songsList.classList.remove('show');
-    });
-
-    document.addEventListener('click', (event) => {
-        if (!event.target.closest('.search-container') && !event.target.closest('#songs-list')) {
+            document.getElementById('search-input').value = "";
             songsList.classList.remove('show');
         }
-    });
 
-    // CAMBIO IMPORTANTE: ESTE LISTENER FUE MODIFICADO
-    searchInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') { 
-            event.preventDefault(); 
-            // no hace nada, bloquea el enter para forzar la selección de la lista
+        // volumen
+        if (volumeSlider) {
+            // CORREGIDO: parseFloat
+            audioPlayer.volume = parseFloat(volumeSlider.value);
+            volumeSlider.addEventListener("input", e => {
+                // CORREGIDO: parseFloat
+                audioPlayer.volume = parseFloat(e.target.value);
+            });
         }
-    });
 
-    // -----------------------------------------------------
-    // init
-    window.addEventListener('load', () => {
-        renderProgressSegments();
-        updateTimeMarker(0);
-        // CORREGIDO: parseFloat
-        if (volumeSlider) audioPlayer.volume = parseFloat(volumeSlider.value);
-        resetGame();
+        // fix visual: sincroniza marcador visual estatico (la flecha)
+        function updateTimeMarker(index) {
+            // CORREGIDO: Math.min
+            const safeIndex = Math.min(index, targetDurations.length - 1);
+            const targetTime = targetDurations[safeIndex];
+            const percentage = getPercentage(targetTime);
 
-        // NUEVO: Cargar racha inicial
-        winStreak = parseInt(localStorage.getItem('winStreak')) || 0;
-        updateStreakDisplay();
-    });
+            timerTextEl.style.left = percentage + '%';
+            timerTextEl.textContent = formatSeconds(targetTime);
 
-    window.addEventListener('beforeunload', () => {
-        pauseAudioInternal();
-    });
+            const prevDuration = safeIndex > 0 ? targetDurations[safeIndex - 1] : 0;
+
+            const startPercentage = getPercentage(prevDuration);
+            progressBarFill.style.width = startPercentage + '%';
+        }
+
+        // fix visual: logica de la barra de progreso mientras suena
+        function startTimeMarkerUpdate(currentAudioTimeSeconds, segmentDurationSeconds, totalDurationForGuess) {
+            stopTimeMarkerUpdate();
+
+            const fullSnippetDuration = totalDurationForGuess * 1000;
+            const segEndPercentage = getPercentage(totalDurationForGuess);
+
+            const updateInterval = 30;
+
+            timeMarkerInterval = setInterval(() => {
+
+                // CORREGIDO: Math.max
+                const elapsedFromGameStart = Math.max(0, (audioPlayer.currentTime - gameStartTime) * 1000);
+
+                if (elapsedFromGameStart >= (fullSnippetDuration + 50)) {
+                    stopTimeMarkerUpdate();
+                    return;
+                }
+                updateBarVisuals(elapsedFromGameStart);
+
+            }, updateInterval);
+
+            function updateBarVisuals(ms) {
+                const currentSeconds = ms / 1000;
+                const currentPct = getPercentage(currentSeconds);
+
+                // CORREGIDO: Math.min
+                progressBarFill.style.width = Math.min(currentPct, segEndPercentage) + '%';
+            }
+        }
+
+        function stopTimeMarkerUpdate() {
+            if (timeMarkerInterval) { clearInterval(timeMarkerInterval); timeMarkerInterval = null; }
+        }
+
+        // -----------------------------------------------------
+        // buscador y eventos
+        searchInput.addEventListener('input', function () {
+            // no eliminar funcion de tolowercase aqui, es necesaria para la busqueda
+            const query = (this.value || '').toLowerCase();
+            songsList.innerHTML = '';
+            if (query.length < 2) { songsList.classList.remove('show'); return; }
+            const filtered = biblioteca.filter(s => s.nombre.toLowerCase().includes(query));
+            if (filtered.length > 0) {
+                // CORREGIDO: forEach, appendChild, slice
+                filtered.forEach(song => {
+                    const div = document.createElement('div');
+                    div.classList.add('suggestion-item');
+                    div.textContent = song.nombre;
+
+                    // EVENTO IMPORTANTE: AHORA LLAMA A LA NUEVA FUNCIÓN DE ADIVINANZA
+                    div.addEventListener('click', () => {
+                        // primero se rellena el input con el valor seleccionado
+                        searchInput.value = song.nombre;
+                        songsList.classList.remove('show');
+                        // luego se dispara la adivinanza SÓLO con la canción seleccionada
+                        handleGuessFromSelection(song.nombre);
+                    });
+                    songsList.appendChild(div);
+                });
+                songsList.classList.add('show');
+            } else songsList.classList.remove('show');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.search-container') && !event.target.closest('#songs-list')) {
+                songsList.classList.remove('show');
+            }
+        });
+
+        // CAMBIO IMPORTANTE: ESTE LISTENER FUE MODIFICADO
+        searchInput.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                // no hace nada, bloquea el enter para forzar la selección de la lista
+            }
+        });
+
+        // -----------------------------------------------------
+        // init
+        window.addEventListener('load', () => {
+            renderProgressSegments();
+            updateTimeMarker(0);
+            // CORREGIDO: parseFloat
+            if (volumeSlider) audioPlayer.volume = parseFloat(volumeSlider.value);
+            resetGame();
+
+            // NUEVO: Cargar racha inicial
+            winStreak = parseInt(localStorage.getItem('winStreak')) || 0;
+            updateStreakDisplay();
+            updateStreakSaverUI();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            pauseAudioInternal();
+        });
     </script>
-<script>
-function ajustarEscala() {
-    const ancho = window.innerWidth;
 
-    // resolucion base de tu UI (aprox por tu diseño)
-    const baseX = 900;
-    const baseY = 950;
-
-    // calculo escala proporcional
-    const escala = Math.min(ancho / baseX, alto / baseY);
-
-    document.body.style.transform = `scale(${escala})`;
-    document.body.style.transformOrigin = "top center";
-}
-
-window.addEventListener("resize", ajustarEscala);
-window.addEventListener("load", ajustarEscala);
-</script>
-<script>
-function ajustarEscala() {
-    const baseAncho = 900;
-    const baseAlto = 950;
-
-    const escala = Math.min(
-        window.innerWidth / baseAncho,
-        window.innerHeight / baseAlto
-    );
-
-    // aplicar solo al contenedor interno
-    const ui = document.getElementById("ui-root");
-    ui.style.transform = `scale(${escala})`;
-
-    // centrarlo
-    ui.style.position = "absolute";
-    ui.style.left = `50%`;
-    ui.style.top = `0`;
-    ui.style.transformOrigin = "top center";
-    ui.style.transform = `translateX(-50%) scale(${escala})`;
-}
-
-window.addEventListener("resize", ajustarEscala);
-window.addEventListener("load", ajustarEscala);
-</script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9a7bc3073fd6dea5',t:'MTc2NDY4ODMzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
 </body>
-</html>
-</body>
+
 </html>
